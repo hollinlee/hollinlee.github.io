@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url);
+---
+
+<!doctype html>
+<html lang={site.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={site.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="container nav" aria-label="Primary navigation">
+        <a class="brand" href="/">{site.name}</a>
+        <div class="nav-links">
+          <a href="/projects/">Projects</a>
+          <a href="/blog/">Writing</a>
+          <a class="optional" href="/now/">Now</a>
+          <a class="optional" href="/about/">About</a>
+        </div>
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer class="site-footer">
+      <div class="container">© {new Date().getFullYear()} {site.name}. Built in public.</div>
+    </footer>
+  </body>
+</html>

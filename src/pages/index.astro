@@ -1,0 +1,94 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+import { contentSlug, formatDate } from '../lib/content';
+
+const projects = (await getCollection('projects'))
+  .filter((item) => item.data.featured)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+const posts = (await getCollection('posts'))
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow">{site.hero.eyebrow}</div>
+      <h1>{site.hero.title}</h1>
+      <p class="lede">{site.hero.description}</p>
+      <div class="actions">
+        <a class="button primary" href="/projects/">View projects</a>
+        <a class="button" href="/blog/">Read writing</a>
+        <a class="button" href={site.github} target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <div><div class="eyebrow">Focus</div><h2>What I care about</h2></div>
+      </div>
+      <div class="grid">
+        {site.focus.map((focus, index) => (
+          <div class="card">
+            <span class="meta">0{index + 1}</span>
+            <h3>{focus}</h3>
+            <p>Building understanding through practical projects, documentation and repeated iteration.</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <div><div class="eyebrow">Selected work</div><h2>Projects</h2></div>
+        <a href="/projects/">View all →</a>
+      </div>
+      <div class="grid">
+        {projects.map((project) => (
+          <a class="card" href={`/projects/${contentSlug(project.id)}/`}>
+            <span class="pill">{project.data.status}</span>
+            <h3>{project.data.title}</h3>
+            <p>{project.data.summary}</p>
+            <div class="card-footer">
+              {project.data.stack.slice(0, 4).map((item) => <span class="pill">{item}</span>)}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <div><div class="eyebrow">Latest</div><h2>Writing</h2></div>
+        <a href="/blog/">View all →</a>
+      </div>
+      <div class="list">
+        {posts.map((post) => (
+          <a class="list-item" href={`/blog/${contentSlug(post.id)}/`}>
+            <div class="meta">{formatDate(post.data.publishedAt)}</div>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.description}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container card">
+      <div class="eyebrow">Now</div>
+      <h2>Building, learning, and documenting the process.</h2>
+      <p class="lede">The website is the public index. Projects provide evidence. Writing records the decisions behind the work.</p>
+      <div class="actions"><a class="button" href="/now/">See what I'm doing now →</a></div>
+    </div>
+  </section>
+</BaseLayout>

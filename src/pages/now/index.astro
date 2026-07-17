@@ -1,0 +1,19 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/content';
+
+const entries = await getCollection('now');
+const entry = entries[0];
+if (!entry) throw new Error('No published Now entry found.');
+const { Content } = await render(entry);
+---
+
+<BaseLayout title="Now — Hollin Lee" description={entry.data.description}>
+  <article class="prose">
+    <div class="eyebrow">Now</div>
+    <h1>What I'm doing now.</h1>
+    <p class="meta">Last updated {formatDate(entry.data.updatedAt)}</p>
+    <Content />
+  </article>
+</BaseLayout>

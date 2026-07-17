@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { contentSlug, formatDate } from '../../lib/content';
+
+const posts = (await getCollection('posts')).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+const notes = (await getCollection('notes')).sort(
+  (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+);
+---
+
+<BaseLayout title="Writing — Hollin Lee" description="Articles, project retrospectives and technical notes.">
+  <section class="prose">
+    <div class="eyebrow">Writing</div>
+    <h1>Ideas, decisions, and useful notes.</h1>
+    <p class="lede">Long-form posts document the reasoning. Notes keep concrete solutions easy to find.</p>
+
+    <h2>Posts</h2>
+    <div class="list">
+      {posts.map((post) => (
+        <a class="list-item" href={`/blog/${contentSlug(post.id)}/`}>
+          <div class="meta">{formatDate(post.data.publishedAt)}</div>
+          <h3>{post.data.title}</h3>
+          <p>{post.data.description}</p>
+        </a>
+      ))}
+    </div>
+
+    <h2>Technical notes</h2>
+    <div class="list">
+      {notes.map((note) => (
+        <a class="list-item" href={`/notes/${contentSlug(note.id)}/`}>
+          <div class="meta">{formatDate(note.data.publishedAt)}</div>
+          <h3>{note.data.title}</h3>
+          <p>{note.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

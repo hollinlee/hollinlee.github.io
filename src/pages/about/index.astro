@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../config/site';
+---
+
+<BaseLayout title="About — Hollin Lee" description="About Hollin Lee and the ideas behind this website.">
+  <article class="prose">
+    <div class="eyebrow">About</div>
+    <h1>Build useful things. Document the decisions.</h1>
+    <p class="lede">{site.description}</p>
+
+    <h2>What this website is for</h2>
+    <p>This is the public index of my work: projects provide evidence, writing explains the reasoning, and the Now page records the current direction.</p>
+
+    <h2>Current focus</h2>
+    <ul>{site.focus.map((item) => <li>{item}</li>)}</ul>
+
+    <h2>Contact</h2>
+    <p><a href={site.github}>GitHub</a>{site.email && <> · <a href={`mailto:${site.email}`}>Email</a></>}</p>
+  </article>
+</BaseLayout>
