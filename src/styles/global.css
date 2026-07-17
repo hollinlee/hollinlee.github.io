@@ -126,8 +126,8 @@ main { min-height: calc(100vh - 120px); }
   backdrop-filter: blur(18px) saturate(120%);
 }
 .profile-card { position: sticky; top: 98px; padding: 1.15rem; text-align: center; }
-.profile-avatar-wrap { width: 148px; margin: 0 auto; padding: .45rem; border-radius: 22px; background: linear-gradient(145deg, var(--primary-soft), var(--pink-soft)); }
-.profile-avatar { width: 100%; aspect-ratio: 1; border: 4px solid var(--surface-solid); border-radius: 18px; object-fit: cover; box-shadow: var(--shadow-soft); }
+.profile-avatar-wrap { width: 148px; aspect-ratio: 1 / 1; margin: 0 auto; padding: .45rem; flex: 0 0 auto; overflow: hidden; border-radius: 22px; background: linear-gradient(145deg, var(--primary-soft), var(--pink-soft)); }
+.profile-avatar { width: 100%; height: 100%; max-width: none; aspect-ratio: 1 / 1; border: 4px solid var(--surface-solid); border-radius: 18px; object-fit: cover; object-position: center; box-shadow: var(--shadow-soft); }
 .profile-card h2 { margin: 1rem 0 .15rem; color: var(--title); font-size: 1.45rem; }
 .profile-handle { color: var(--primary); font-size: .82rem; font-weight: 750; }
 .profile-divider { width: 38px; height: 4px; margin: .75rem auto; border-radius: 99px; background: linear-gradient(90deg, var(--primary), var(--pink)); }
@@ -212,7 +212,7 @@ main { min-height: calc(100vh - 120px); }
   .home-shell { margin-top: -70px; }
   .home-grid { grid-template-columns: 1fr; }
   .profile-card { position: relative; top: auto; display: grid; grid-template-columns: 120px 1fr; gap: 1rem; text-align: left; }
-  .profile-avatar-wrap { width: 120px; margin: 0; }
+  .profile-avatar-wrap { width: 120px; aspect-ratio: 1 / 1; margin: 0; }
   .profile-card h2 { margin-top: .2rem; }
   .profile-divider { margin: .65rem 0; }
   .profile-stats, .profile-links { grid-column: 1 / -1; }
@@ -224,7 +224,7 @@ main { min-height: calc(100vh - 120px); }
   .anime-hero, .hero-inner { min-height: 610px; }
   .hero-copy h1 { font-size: 3.25rem; }
   .profile-card { grid-template-columns: 94px 1fr; padding: .9rem; }
-  .profile-avatar-wrap { width: 94px; padding: .35rem; }
+  .profile-avatar-wrap { width: 94px; aspect-ratio: 1 / 1; padding: .35rem; }
   .article-card { grid-template-columns: 1fr; }
   .article-illustration { display: none; }
   .grid { grid-template-columns: 1fr; }
