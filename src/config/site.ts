@@ -21,6 +21,5 @@ export const site = {
   focus: [
     'AI Agent 与开发者工具',
     '编译器与系统编程',
-    'AI 辅助写作工作流',
   ],
 } as const;

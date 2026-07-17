@@ -32,7 +32,7 @@ const canonical = new URL(Astro.url.pathname, site.url);
     <header class="site-header">
       <nav class="container nav" aria-label="主导航">
         <a class="brand" href="/">
-          <span class="brand-mark" aria-hidden="true">✦</span>
+          <img class="brand-avatar" src={site.avatar} alt="" width="38" height="38" />
           <span class="brand-copy">{site.nickname}<small>@{site.handle}</small></span>
         </a>
         <div class="nav-links">
