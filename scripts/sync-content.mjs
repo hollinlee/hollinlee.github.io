@@ -5,6 +5,9 @@ import { resolve } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const contentTarget = resolve(root, 'src/content');
 const dataTarget = resolve(root, 'src/content-data');
+const astroCache = resolve(root, '.astro');
+const astroDataStore = resolve(root, 'node_modules/.astro');
+const buildOutput = resolve(root, 'dist');
 const tempSource = resolve(root, '.content-source');
 const exampleSource = resolve(root, 'examples/content');
 const collections = ['posts', 'notes', 'projects', 'logs', 'now'];
@@ -35,6 +38,11 @@ if (!existsSync(published)) {
   throw new Error(`Published content directory not found: ${published}`);
 }
 
+// Astro's content data store can retain entries removed by an external source.
+// Clear it before replacing collections so private/example content never leaks across builds.
+rmSync(astroCache, { recursive: true, force: true });
+rmSync(astroDataStore, { recursive: true, force: true });
+rmSync(buildOutput, { recursive: true, force: true });
 mkdirSync(contentTarget, { recursive: true });
 for (const collection of collections) {
   const target = resolve(contentTarget, collection);
