@@ -1,6 +1,9 @@
 export const site = {
   name: 'Hollin Lee',
   handle: 'hollinlee',
+  nickname: '唐猫爱吃鱼',
+  avatar: '/images/avatar.webp',
+  role: 'AI 开发工具构建者',
   title: 'Hollin Lee — AI 开发工具、编译器与系统软件',
   description:
     '构建实用的 AI 开发工具，持续探索编译器、系统软件与人机协作工作流。',

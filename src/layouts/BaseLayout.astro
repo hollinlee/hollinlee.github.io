@@ -31,7 +31,10 @@ const canonical = new URL(Astro.url.pathname, site.url);
   <body>
     <header class="site-header">
       <nav class="container nav" aria-label="主导航">
-        <a class="brand" href="/">{site.name}</a>
+        <a class="brand" href="/">
+          <img class="brand-avatar" src="/images/avatar.webp" alt="" width="34" height="34" />
+          <span class="brand-copy">{site.name}<small>@{site.handle}</small></span>
+        </a>
         <div class="nav-links">
           <a href="/projects/">项目</a>
           <a href="/blog/">文章</a>
