@@ -4,115 +4,124 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../config/site';
 import { contentSlug, formatDate, projectStatusLabel } from '../lib/content';
 
-const projects = (await getCollection('projects'))
-  .filter((item) => item.data.featured)
-  .sort((a, b) => a.data.order - b.data.order);
-const featuredProject = projects[0];
-const posts = (await getCollection('posts'))
-  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
-  .slice(0, 3);
+const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const featuredProject = allProjects.find((item) => item.data.featured) ?? allProjects[0];
+const allPosts = (await getCollection('posts'))
+  .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+const posts = allPosts.slice(0, 4);
+const notes = await getCollection('notes');
 const nowEntries = await getCollection('now');
 const nowEntry = nowEntries[0];
 ---
 
 <BaseLayout>
-  <section class="profile-hero">
-    <div class="container hero-grid">
-      <div class="identity-panel">
-        <div>
-          <div class="identity-topline">
-            <span>PROFILE / HOLLINLEE</span>
-            <span>BUILDING IN PUBLIC · 2026</span>
-          </div>
-          <h1>你好，<span>我是 Hollin。</span></h1>
-          <p class="hero-lede">{site.hero.description}</p>
-          <div class="hero-tags">
-            <span class="tag">@{site.handle}</span>
-            <span class="tag">{site.nickname}</span>
-            <span class="tag">{site.role}</span>
-          </div>
-        </div>
+  <section class="anime-hero">
+    <div class="hero-sparkles" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <span class="hero-badge">欢迎来到我的小站</span>
+        <h1>唐猫爱吃鱼<span>の 小站</span></h1>
+        <p>勇者的小队在此集合，出发！这里记录 AI developer tooling、编译器、系统编程和一路上的思考。</p>
         <div class="hero-actions">
-          <a class="button primary" href="/projects/">查看代表项目</a>
-          <a class="button" href="/blog/">阅读文章</a>
+          <a class="button primary" href="/blog/">开始阅读</a>
+          <a class="button" href="/projects/">看看项目</a>
           <a class="button" href={site.github} target="_blank" rel="noreferrer">GitHub ↗</a>
         </div>
       </div>
 
-      <div class="avatar-panel" aria-label="Hollin 的个人头像">
-        <img src={site.avatar} alt="Hollin 使用的猫耳动漫头像" width="720" height="720" />
-        <div class="avatar-stamp top">
-          <strong><span class="status-dot"></span>正在构建</strong>
-          <span>AI TOOLS / COMPILER / SYSTEMS</span>
-        </div>
-        <div class="avatar-stamp bottom">
-          <strong>{site.nickname}</strong>
-          <span>PERSONAL MARK · 01</span>
+      <div class="hero-visual">
+        <div class="hero-character-frame">
+          <img src={site.avatar} alt="Hollin 使用的猫耳动漫头像" width="720" height="720" />
+          <span class="hero-float one">✦ 正在构建 AI 工具</span>
+          <span class="hero-float two">今日也要认真写代码喵</span>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="section-head">
-        <div><div class="section-kicker">PERSONAL INDEX</div><h2>我的工作与近况</h2></div>
-        <a class="section-link" href="/about/">了解更多 →</a>
-      </div>
+  <div class="home-shell">
+    <div class="container home-grid">
+      <aside class="profile-card">
+        <div class="profile-avatar-wrap">
+          <img class="profile-avatar" src={site.avatar} alt="唐猫爱吃鱼的头像" width="720" height="720" />
+        </div>
+        <div>
+          <h2>{site.nickname}</h2>
+          <div class="profile-handle">@{site.handle}</div>
+          <div class="profile-divider"></div>
+          <p class="profile-bio">构建实用的 AI 开发工具，也在学习编译器、系统软件和更好的写作方式。</p>
+        </div>
+        <div class="profile-stats" aria-label="内容统计">
+          <div class="profile-stat"><strong>{allPosts.length}</strong><span>文章</span></div>
+          <div class="profile-stat"><strong>{allProjects.length}</strong><span>项目</span></div>
+          <div class="profile-stat"><strong>{notes.length}</strong><span>笔记</span></div>
+        </div>
+        <div class="profile-links">
+          <a class="profile-link" href={site.github} target="_blank" rel="noreferrer">GitHub</a>
+          <a class="profile-link" href="/about/">关于我</a>
+        </div>
+      </aside>
 
-      <div class="bento">
+      <div class="main-feed">
+        <section class="welcome-card glass-card">
+          <div class="card-kicker">HELLO, TRAVELER</div>
+          <h2>你好，我是 Hollin。</h2>
+          <p>{site.hero.description} 这个网站是我的公开索引，也是保存项目、文章与技术笔记的小小据点。</p>
+          <div class="focus-tags">
+            {site.focus.map((item) => <span class="pill">{item}</span>)}
+          </div>
+        </section>
+
         {featuredProject && (
-          <a class="bento-item project" href={`/projects/${contentSlug(featuredProject.id)}/`}>
-            <div class="bento-top">
-              <div><div class="section-kicker">代表项目</div><h3>{featuredProject.data.title}</h3></div>
-              <span class="bento-number">01 / PROJECT</span>
-            </div>
+          <a class="widget project-banner content-card" href={`/projects/${contentSlug(featuredProject.id)}/`}>
+            <div class="card-kicker">FEATURED PROJECT</div>
+            <h3>{featuredProject.data.title}</h3>
             <p>{featuredProject.data.summary}</p>
-            <div class="bento-footer">
+            <div class="focus-tags">
               <span class="pill">{projectStatusLabel(featuredProject.data.status)}</span>
-              {featuredProject.data.stack.map((item) => <span class="pill">{item}</span>)}
+              {featuredProject.data.stack.slice(0, 4).map((item) => <span class="pill">{item}</span>)}
             </div>
           </a>
         )}
 
-        <a class="bento-item now" href="/now/">
-          <div class="bento-top">
-            <div><div class="section-kicker">NOW</div><h3>最近在做什么</h3></div>
-            <span class="bento-number">02 / STATUS</span>
+        <section class="feed-section content-card">
+          <div class="feed-head">
+            <div><div class="card-kicker">LATEST WRITING</div><h2>最近文章</h2></div>
+            <a class="feed-more" href="/blog/">全部文章 →</a>
           </div>
-          <p>重建个人主页与内容系统，持续改进 AI developer tooling，并学习编译器与系统编程。</p>
-          {nowEntry && <div class="bento-footer"><span class="pill">更新于 {formatDate(nowEntry.data.updatedAt)}</span></div>}
-        </a>
-
-        <div class="bento-item writing">
-          <div class="bento-top">
-            <div><div class="section-kicker">WRITING</div><h3>最近文章</h3></div>
-            <a class="section-link" href="/blog/">全部文章 →</a>
-          </div>
-          <div class="writing-list">
-            {posts.map((post) => (
-              <a class="writing-row" href={`/blog/${contentSlug(post.id)}/`}>
-                <time>{formatDate(post.data.publishedAt)}</time>
-                <strong>{post.data.title}</strong>
-                <span>↗</span>
+          <div class="article-list">
+            {posts.map((post, index) => (
+              <a class="article-card" href={`/blog/${contentSlug(post.id)}/`}>
+                <div>
+                  <div class="article-meta"><span>{formatDate(post.data.publishedAt)}</span><span>·</span><span>{post.data.tags.slice(0, 2).join(' / ')}</span></div>
+                  <h3>{post.data.title}</h3>
+                  <p>{post.data.description}</p>
+                </div>
+                <div class="article-illustration" aria-hidden="true">{['✦', '☁', '⌘', '☆'][index % 4]}</div>
               </a>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div class="bento-item profile">
-          <div class="bento-top">
-            <div><div class="section-kicker">PROFILE DATA</div><h3>个人档案</h3></div>
-            <span class="bento-number">03 / ME</span>
-          </div>
-          <ul class="profile-list">
-            <li><span>身份</span><small>{site.role}</small></li>
-            <li><span>昵称</span><small>{site.nickname}</small></li>
-            <li><span>关注</span><small>Agent / Compiler / Systems</small></li>
-            <li><span>输出</span><small>项目、文章与技术笔记</small></li>
-          </ul>
+        <div class="widget-grid">
+          <a class="widget content-card" href="/now/">
+            <div class="card-kicker">NOW</div>
+            <h3>最近在做什么</h3>
+            <div class="now-lines">
+              <div class="now-line">重建个人主页和内容系统</div>
+              <div class="now-line">改进 AI developer tooling</div>
+              <div class="now-line">学习编译器与系统编程</div>
+            </div>
+            {nowEntry && <p style="margin-top: .9rem;">更新于 {formatDate(nowEntry.data.updatedAt)}</p>}
+          </a>
+
+          <a class="widget content-card" href="/about/">
+            <div class="card-kicker">ABOUT</div>
+            <h3>关于这个小站</h3>
+            <p>项目提供证据，文章记录思考，技术笔记保存解决过的问题。</p>
+          </a>
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </BaseLayout>
