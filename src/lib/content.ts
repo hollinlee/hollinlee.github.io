@@ -3,9 +3,20 @@ export function contentSlug(id: string) {
 }
 
 export function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('en', {
+  return new Intl.DateTimeFormat('zh-CN', {
     year: 'numeric',
-    month: 'short',
+    month: 'long',
     day: 'numeric',
   }).format(date);
+}
+
+const projectStatusLabels = {
+  active: '活跃维护',
+  experimental: '实验中',
+  maintained: '维护中',
+  archived: '已归档',
+} as const;
+
+export function projectStatusLabel(status: keyof typeof projectStatusLabels) {
+  return projectStatusLabels[status];
 }

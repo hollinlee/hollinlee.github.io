@@ -11,13 +11,13 @@ const notes = (await getCollection('notes')).sort(
 );
 ---
 
-<BaseLayout title="Writing — Hollin Lee" description="Articles, project retrospectives and technical notes.">
+<BaseLayout title="文章 — Hollin Lee" description="技术文章、项目复盘与实用笔记。">
   <section class="prose">
-    <div class="eyebrow">Writing</div>
-    <h1>Ideas, decisions, and useful notes.</h1>
-    <p class="lede">Long-form posts document the reasoning. Notes keep concrete solutions easy to find.</p>
+    <div class="eyebrow">公开写作</div>
+    <h1>记录想法、决策和可复用的经验。</h1>
+    <p class="lede">长文章解释思考过程，技术笔记保存具体问题的解决方法。</p>
 
-    <h2>Posts</h2>
+    <h2>文章</h2>
     <div class="list">
       {posts.map((post) => (
         <a class="list-item" href={`/blog/${contentSlug(post.id)}/`}>
@@ -28,7 +28,7 @@ const notes = (await getCollection('notes')).sort(
       ))}
     </div>
 
-    <h2>Technical notes</h2>
+    <h2>技术笔记</h2>
     <div class="list">
       {notes.map((note) => (
         <a class="list-item" href={`/notes/${contentSlug(note.id)}/`}>

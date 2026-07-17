@@ -1,23 +1,23 @@
 export const site = {
   name: 'Hollin Lee',
   handle: 'hollinlee',
-  title: 'Hollin Lee — AI Developer Tooling, Compilers and Systems',
+  title: 'Hollin Lee — AI 开发工具、编译器与系统软件',
   description:
-    'Building practical AI developer tools and exploring compilers, systems and human-AI workflows.',
+    '构建实用的 AI 开发工具，持续探索编译器、系统软件与人机协作工作流。',
   url: 'https://hollinlee.github.io',
-  language: 'en',
-  locale: 'en_US',
+  language: 'zh-CN',
+  locale: 'zh_CN',
   email: '',
   github: 'https://github.com/hollinlee',
   hero: {
     eyebrow: 'AI-native developer tooling',
-    title: "Hi, I'm Hollin.",
+    title: '你好，我是 Hollin。',
     description:
-      'I build practical AI developer tools and explore compilers, systems, and human-AI workflows.',
+      '我构建实用的 AI 开发工具，也在持续探索编译器、系统软件与人机协作工作流。',
   },
   focus: [
-    'AI agents and developer tooling',
-    'Compilers and systems programming',
-    'AI-assisted writing workflows',
+    'AI Agent 与开发者工具',
+    '编译器与系统编程',
+    'AI 辅助写作工作流',
   ],
 } as const;

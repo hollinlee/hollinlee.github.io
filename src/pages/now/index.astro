@@ -9,11 +9,11 @@ if (!entry) throw new Error('No published Now entry found.');
 const { Content } = await render(entry);
 ---
 
-<BaseLayout title="Now — Hollin Lee" description={entry.data.description}>
+<BaseLayout title="近况 — Hollin Lee" description={entry.data.description}>
   <article class="prose">
-    <div class="eyebrow">Now</div>
-    <h1>What I'm doing now.</h1>
-    <p class="meta">Last updated {formatDate(entry.data.updatedAt)}</p>
+    <div class="eyebrow">近况</div>
+    <h1>我最近在做什么。</h1>
+    <p class="meta">更新于 {formatDate(entry.data.updatedAt)}</p>
     <Content />
   </article>
 </BaseLayout>

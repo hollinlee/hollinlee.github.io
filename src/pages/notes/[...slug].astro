@@ -14,10 +14,10 @@ const { Content } = await render(note);
 
 <BaseLayout title={`${note.data.title} — Hollin Lee`} description={note.data.description}>
   <article class="prose">
-    <div class="eyebrow">Technical note</div>
+    <div class="eyebrow">技术笔记</div>
     <h1>{note.data.title}</h1>
     <p class="lede">{note.data.description}</p>
-    <p class="meta">Published {formatDate(note.data.publishedAt)}</p>
+    <p class="meta">发布于 {formatDate(note.data.publishedAt)}</p>
     <Content />
   </article>
 </BaseLayout>

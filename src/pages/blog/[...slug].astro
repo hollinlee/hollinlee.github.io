@@ -14,10 +14,10 @@ const { Content } = await render(post);
 
 <BaseLayout title={`${post.data.title} — Hollin Lee`} description={post.data.description}>
   <article class="prose">
-    <div class="eyebrow">Article</div>
+    <div class="eyebrow">文章</div>
     <h1>{post.data.title}</h1>
     <p class="lede">{post.data.description}</p>
-    <p class="meta">Published {formatDate(post.data.publishedAt)}</p>
+    <p class="meta">发布于 {formatDate(post.data.publishedAt)}</p>
     <Content />
   </article>
 </BaseLayout>

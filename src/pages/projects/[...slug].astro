@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { contentSlug } from '../../lib/content';
+import { contentSlug, projectStatusLabel } from '../../lib/content';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -14,12 +14,12 @@ const { Content } = await render(project);
 
 <BaseLayout title={`${project.data.title} — Hollin Lee`} description={project.data.summary}>
   <article class="prose">
-    <div class="eyebrow">Project · {project.data.status}</div>
+    <div class="eyebrow">项目 · {projectStatusLabel(project.data.status)}</div>
     <h1>{project.data.title}</h1>
     <p class="lede">{project.data.summary}</p>
     <div class="actions">
-      {project.data.repo && <a class="button primary" href={project.data.repo} target="_blank" rel="noreferrer">Source code</a>}
-      {project.data.demo && <a class="button" href={project.data.demo} target="_blank" rel="noreferrer">Live demo</a>}
+      {project.data.repo && <a class="button primary" href={project.data.repo} target="_blank" rel="noreferrer">源代码</a>}
+      {project.data.demo && <a class="button" href={project.data.demo} target="_blank" rel="noreferrer">在线演示</a>}
     </div>
     <div class="card-footer">
       {project.data.stack.map((item) => <span class="pill">{item}</span>)}

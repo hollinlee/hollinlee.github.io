@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../config/site';
-import { contentSlug, formatDate } from '../lib/content';
+import { contentSlug, formatDate, projectStatusLabel } from '../lib/content';
 
 const projects = (await getCollection('projects'))
   .filter((item) => item.data.featured)
@@ -20,8 +20,8 @@ const posts = (await getCollection('posts'))
       <h1>{site.hero.title}</h1>
       <p class="lede">{site.hero.description}</p>
       <div class="actions">
-        <a class="button primary" href="/projects/">View projects</a>
-        <a class="button" href="/blog/">Read writing</a>
+        <a class="button primary" href="/projects/">查看项目</a>
+        <a class="button" href="/blog/">阅读文章</a>
         <a class="button" href={site.github} target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </div>
@@ -30,14 +30,14 @@ const posts = (await getCollection('posts'))
   <section class="section">
     <div class="container">
       <div class="section-heading">
-        <div><div class="eyebrow">Focus</div><h2>What I care about</h2></div>
+        <div><div class="eyebrow">关注方向</div><h2>我正在长期投入的领域</h2></div>
       </div>
       <div class="grid">
         {site.focus.map((focus, index) => (
           <div class="card">
             <span class="meta">0{index + 1}</span>
             <h3>{focus}</h3>
-            <p>Building understanding through practical projects, documentation and repeated iteration.</p>
+            <p>通过真实项目、持续记录和反复迭代，建立可以验证的理解与能力。</p>
           </div>
         ))}
       </div>
@@ -47,13 +47,13 @@ const posts = (await getCollection('posts'))
   <section class="section">
     <div class="container">
       <div class="section-heading">
-        <div><div class="eyebrow">Selected work</div><h2>Projects</h2></div>
-        <a href="/projects/">View all →</a>
+        <div><div class="eyebrow">代表作品</div><h2>项目</h2></div>
+        <a href="/projects/">查看全部 →</a>
       </div>
       <div class="grid">
         {projects.map((project) => (
           <a class="card" href={`/projects/${contentSlug(project.id)}/`}>
-            <span class="pill">{project.data.status}</span>
+            <span class="pill">{projectStatusLabel(project.data.status)}</span>
             <h3>{project.data.title}</h3>
             <p>{project.data.summary}</p>
             <div class="card-footer">
@@ -68,8 +68,8 @@ const posts = (await getCollection('posts'))
   <section class="section">
     <div class="container">
       <div class="section-heading">
-        <div><div class="eyebrow">Latest</div><h2>Writing</h2></div>
-        <a href="/blog/">View all →</a>
+        <div><div class="eyebrow">最近更新</div><h2>文章</h2></div>
+        <a href="/blog/">查看全部 →</a>
       </div>
       <div class="list">
         {posts.map((post) => (
@@ -85,10 +85,10 @@ const posts = (await getCollection('posts'))
 
   <section class="section">
     <div class="container card">
-      <div class="eyebrow">Now</div>
-      <h2>Building, learning, and documenting the process.</h2>
-      <p class="lede">The website is the public index. Projects provide evidence. Writing records the decisions behind the work.</p>
-      <div class="actions"><a class="button" href="/now/">See what I'm doing now →</a></div>
+      <div class="eyebrow">最近在做</div>
+      <h2>持续构建、学习，并记录过程。</h2>
+      <p class="lede">网站是我的公开索引：项目提供证据，文章记录过程和技术决策。</p>
+      <div class="actions"><a class="button" href="/now/">查看我的近况 →</a></div>
     </div>
   </section>
 </BaseLayout>

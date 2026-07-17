@@ -1,15 +1,15 @@
 ---
-title: "Now"
-description: "What I am building and learning now."
+title: "近况"
+description: "我最近正在构建、学习和改进的事情。"
 updatedAt: 2026-07-17
 ---
 
-## Building
+## 正在构建
 
-- A reusable personal homepage and publishing workflow.
-- Practical AI developer tools.
+- 一个可复用的个人主页与发布工作流。
+- 实用的 AI 开发工具。
 
-## Learning
+## 正在学习
 
-- Compiler design and systems programming.
-- Better human-AI workflows.
+- 编译器设计与系统编程。
+- 更有效、可持续的人机协作工作流。

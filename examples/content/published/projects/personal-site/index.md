@@ -1,6 +1,6 @@
 ---
-title: "Forkable Personal Homepage"
-summary: "An Astro personal homepage that can securely pull publishable Markdown from a private content repository."
+title: "可 Fork 的个人主页"
+summary: "一个 Astro 个人主页模板，可以安全地从 Private content repository 中拉取公开 Markdown 内容。"
 status: active
 featured: true
 order: 1
@@ -13,14 +13,14 @@ stack:
   - GitHub Actions
 ---
 
-## Problem
+## 问题
 
-Personal sites often mix presentation code, drafts and published writing in one repository.
+个人网站经常把页面代码、草稿和已经发布的文章混在同一个 repository 中。
 
-## Solution
+## 方案
 
-This template keeps the website public and reusable while importing only `published/` from an optional private content repository during the build.
+这个模板让网站代码保持公开、可复用，同时在构建时只从可选的 Private content repository 中导入 `published/`。
 
-## Result
+## 结果
 
-A fork can deploy immediately with example content, then connect a private content repository through GitHub Actions secrets.
+Fork 后可以直接使用示例内容部署，也可以通过 GitHub Actions Secret 连接自己的 Private content repository。

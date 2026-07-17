@@ -1,11 +1,11 @@
 ---
-title: "Separate public content from private notes"
-description: "Use an explicit directory boundary instead of relying on theme-specific frontmatter to prevent accidental publication."
+title: "分离公开内容与私人笔记"
+description: "使用明确的目录边界，避免依赖主题特定的 frontmatter 判断内容是否可以发布。"
 publishedAt: 2026-07-17
 tags:
   - content
   - privacy
-lang: en
+lang: zh-CN
 ---
 
-The production build reads only `published/` and `data/`. Drafts and private notes are never copied into the website workspace.
+生产构建只读取 `published/` 和 `data/`。草稿与私人笔记不会被复制到网站构建环境中。

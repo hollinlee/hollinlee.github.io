@@ -30,19 +30,19 @@ const canonical = new URL(Astro.url.pathname, site.url);
   </head>
   <body>
     <header class="site-header">
-      <nav class="container nav" aria-label="Primary navigation">
+      <nav class="container nav" aria-label="主导航">
         <a class="brand" href="/">{site.name}</a>
         <div class="nav-links">
-          <a href="/projects/">Projects</a>
-          <a href="/blog/">Writing</a>
-          <a class="optional" href="/now/">Now</a>
-          <a class="optional" href="/about/">About</a>
+          <a href="/projects/">项目</a>
+          <a href="/blog/">文章</a>
+          <a class="optional" href="/now/">近况</a>
+          <a class="optional" href="/about/">关于</a>
         </div>
       </nav>
     </header>
     <main><slot /></main>
     <footer class="site-footer">
-      <div class="container">© {new Date().getFullYear()} {site.name}. Built in public.</div>
+      <div class="container">© {new Date().getFullYear()} {site.name} · 持续构建，公开记录。</div>
     </footer>
   </body>
 </html>
