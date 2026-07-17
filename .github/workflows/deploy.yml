@@ -26,10 +26,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure private content deploy key
-        if: ${{ secrets.CONTENT_DEPLOY_KEY != '' }}
         env:
           CONTENT_DEPLOY_KEY: ${{ secrets.CONTENT_DEPLOY_KEY }}
         run: |
+          if [ -z "$CONTENT_DEPLOY_KEY" ]; then
+            echo "CONTENT_DEPLOY_KEY is not configured; continuing without SSH content access."
+            exit 0
+          fi
           install -d -m 700 ~/.ssh
           printf '%s\n' "$CONTENT_DEPLOY_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
@@ -47,7 +50,7 @@ jobs:
       - name: Build
         env:
           CONTENT_REPO_URL: ${{ vars.CONTENT_REPO_URL }}
-          CONTENT_REPO_BRANCH: ${{ vars.CONTENT_REPO_BRANCH || 'main' }}
+          CONTENT_REPO_BRANCH: ${{ vars.CONTENT_REPO_BRANCH }}
           CONTENT_REPO_TOKEN: ${{ secrets.CONTENT_REPO_TOKEN }}
         run: npm run build
 
