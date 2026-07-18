@@ -1,0 +1,15 @@
+<script is:inline>
+  (() => {
+    const storageKey = 'site-theme';
+    let stored = null;
+    try {
+      stored = localStorage.getItem(storageKey);
+    } catch {
+      // Storage can be unavailable in hardened privacy contexts; system theme remains the fallback.
+    }
+    const systemTheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'night' : 'day';
+    const theme = stored === 'day' || stored === 'night' ? stored : systemTheme;
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.dataset.themeSource = stored ? 'user' : 'system';
+  })();
+</script>

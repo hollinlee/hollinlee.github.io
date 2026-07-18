@@ -1,0 +1,19 @@
+---
+const petals = Array.from({ length: 20 }, (_, index) => ({
+  left: (index * 37 + 11) % 101,
+  delay: -((index * 1.7) % 15),
+  duration: 13 + (index % 6) * 1.8,
+  size: 8 + (index % 5) * 3,
+  drift: -42 + (index % 7) * 14,
+  opacity: 0.34 + (index % 5) * 0.1,
+}));
+---
+
+<div class="sakura-layer" aria-hidden="true">
+  {petals.map((petal) => (
+    <span
+      class="sakura-petal"
+      style={`--petal-left:${petal.left}%;--petal-delay:${petal.delay}s;--petal-duration:${petal.duration}s;--petal-size:${petal.size}px;--petal-drift:${petal.drift}px;--petal-opacity:${petal.opacity}`}
+    ></span>
+  ))}
+</div>

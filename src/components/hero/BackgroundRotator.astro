@@ -1,0 +1,125 @@
+---
+import { backgrounds } from '../../config/content';
+
+const serialized = JSON.stringify(backgrounds);
+---
+
+<div
+  class="hero-background"
+  data-background-rotator
+  data-backgrounds={serialized}
+  style={`--hero-blur:${backgrounds.blur}px;--hero-transition:${backgrounds.transitionDuration}ms`}
+  aria-hidden="true"
+>
+  <div class="hero-background-layer is-active" data-background-layer="0"></div>
+  <div class="hero-background-layer" data-background-layer="1"></div>
+  <div class="hero-background-overlay"></div>
+</div>
+
+<script>
+  type Theme = 'day' | 'night';
+  type BackgroundEntry = {
+    image: string;
+    textPosition: 'left' | 'right' | 'center';
+    backgroundPosition: string;
+  };
+  type BackgroundConfig = {
+    rotationInterval: number;
+    transitionDuration: number;
+    day: BackgroundEntry[];
+    night: BackgroundEntry[];
+  };
+
+  document.querySelectorAll<HTMLElement>('[data-background-rotator]').forEach((root) => {
+    const hero = root.closest<HTMLElement>('.anime-hero');
+    const layers = Array.from(root.querySelectorAll<HTMLElement>('[data-background-layer]'));
+    const config = JSON.parse(root.dataset.backgrounds ?? '{}') as BackgroundConfig;
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let theme: Theme = document.documentElement.dataset.theme === 'night' ? 'night' : 'day';
+    let index = 0;
+    let activeLayer = 0;
+    let timer: number | undefined;
+    let generation = 0;
+
+    const pool = () => config[theme] ?? [];
+
+    function updateTextPosition(entry: BackgroundEntry) {
+      if (hero) hero.dataset.textPosition = entry.textPosition;
+    }
+
+    function setLayer(layer: HTMLElement, entry: BackgroundEntry) {
+      layer.style.backgroundImage = `url(${JSON.stringify(entry.image)})`;
+      layer.style.backgroundPosition = entry.backgroundPosition;
+    }
+
+    function preload(entry: BackgroundEntry) {
+      return new Promise<void>((resolve) => {
+        const image = new Image();
+        image.onload = () => resolve();
+        image.onerror = () => resolve();
+        image.src = entry.image;
+      });
+    }
+
+    function clearTimer() {
+      if (timer !== undefined) window.clearTimeout(timer);
+      timer = undefined;
+    }
+
+    function schedule() {
+      clearTimer();
+      if (document.hidden || reducedMotion.matches || pool().length < 2) return;
+      timer = window.setTimeout(() => void showNext(), config.rotationInterval);
+    }
+
+    async function showNext() {
+      const entries = pool();
+      if (entries.length < 2) return;
+      const nextIndex = (index + 1) % entries.length;
+      const entry = entries[nextIndex];
+      const requestGeneration = generation;
+      await preload(entry);
+      if (requestGeneration !== generation || document.hidden) return;
+
+      const nextLayer = activeLayer === 0 ? 1 : 0;
+      setLayer(layers[nextLayer], entry);
+      updateTextPosition(entry);
+      requestAnimationFrame(() => {
+        layers[nextLayer].classList.add('is-active');
+        layers[activeLayer].classList.remove('is-active');
+        activeLayer = nextLayer;
+        index = nextIndex;
+        schedule();
+      });
+    }
+
+    async function reset(nextTheme: Theme) {
+      const requestGeneration = generation + 1;
+      generation = requestGeneration;
+      clearTimer();
+      theme = nextTheme;
+      index = 0;
+      const entry = pool()[0];
+      if (!entry) return;
+      await preload(entry);
+      if (requestGeneration !== generation) return;
+      setLayer(layers[activeLayer], entry);
+      layers[activeLayer].classList.add('is-active');
+      layers[activeLayer === 0 ? 1 : 0].classList.remove('is-active');
+      updateTextPosition(entry);
+      schedule();
+    }
+
+    addEventListener('site-theme-change', ((event: CustomEvent<{ theme: Theme }>) => {
+      void reset(event.detail.theme);
+    }) as EventListener);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) clearTimer();
+      else schedule();
+    });
+
+    reducedMotion.addEventListener('change', schedule);
+    void reset(theme);
+  });
+</script>

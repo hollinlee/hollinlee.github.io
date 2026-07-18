@@ -1,6 +1,9 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import BackgroundRotator from '../components/hero/BackgroundRotator.astro';
+import NightParticles from '../components/effects/NightParticles.astro';
+import SakuraLayer from '../components/effects/SakuraLayer.astro';
 import { site } from '../config/site';
 import { contentSlug, formatDate, projectStatusLabel } from '../lib/content';
 
@@ -15,8 +18,10 @@ const nowEntry = nowEntries[0];
 ---
 
 <BaseLayout>
-  <section class="anime-hero">
-    <div class="hero-sparkles" aria-hidden="true"></div>
+  <section class="anime-hero" data-text-position="left">
+    <BackgroundRotator />
+    <SakuraLayer />
+    <NightParticles />
     <div class="container hero-inner">
       <div class="hero-copy">
         <span class="hero-badge">欢迎来到我的小站</span>
