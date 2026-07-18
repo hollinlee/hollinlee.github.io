@@ -21,7 +21,8 @@
 }
 
 .brand,
-.nav-links,
+.nav-desktop-links,
+.nav-actions,
 .hero-actions,
 .profile-links,
 .focus-tags,
@@ -41,8 +42,13 @@
   line-height: 1.05;
 }
 
-.nav-links {
+.nav-desktop-links,
+.nav-actions {
   gap: 0.45rem;
+}
+
+.nav-menu {
+  display: none;
 }
 
 main {
@@ -103,7 +109,7 @@ main {
 }
 
 .profile-avatar-wrap {
-  width: 148px;
+  width: 86%;
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   padding: 0.45rem;
@@ -252,11 +258,15 @@ main {
     padding: 0 0.8rem;
   }
 
-  .nav-links {
-    gap: 0.1rem;
+  .nav-desktop-links {
+    display: none;
   }
 
-  .nav-links .optional,
+  .nav-menu {
+    position: relative;
+    display: block;
+  }
+
   .brand-copy small {
     display: none;
   }
@@ -296,25 +306,12 @@ main {
   .profile-card {
     position: relative;
     top: auto;
-    display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 1rem;
-    text-align: left;
+    width: min(100%, 360px);
+    margin-inline: auto;
   }
 
   .profile-avatar-wrap {
-    width: 120px;
-    aspect-ratio: 1 / 1;
-    margin: 0;
-  }
-
-  .profile-stats,
-  .profile-links {
-    grid-column: 1 / -1;
-  }
-
-  .profile-links {
-    justify-content: flex-start;
+    width: min(86%, 320px);
   }
 
   .article-card {
@@ -329,13 +326,11 @@ main {
   }
 
   .profile-card {
-    grid-template-columns: 94px 1fr;
     padding: 0.9rem;
   }
 
   .profile-avatar-wrap {
-    width: 94px;
-    aspect-ratio: 1 / 1;
+    width: min(86%, 280px);
     padding: 0.35rem;
   }
 
