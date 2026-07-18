@@ -15,7 +15,10 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@fontsource/caveat": "^5.2.8",
+    "@fontsource/noto-sans-sc": "^5.2.9",
     "astro": "^7.1.0",
+    "lxgw-wenkai-screen-webfont": "^1.7.0",
     "yaml": "^2.9.0"
   },
   "devDependencies": {

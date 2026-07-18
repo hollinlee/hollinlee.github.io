@@ -1,0 +1,30 @@
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --surface-glass: var(--surface-raised);
+  }
+
+  .nav,
+  .glass-card,
+  .content-card,
+  .profile-card,
+  .button,
+  .style-surface-glass {
+    background: var(--surface-raised);
+    backdrop-filter: none;
+  }
+}
