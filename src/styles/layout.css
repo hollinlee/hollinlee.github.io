@@ -226,18 +226,44 @@ main {
   gap: 0.6rem;
 }
 
-.projects-page {
+.projects-page,
+.archive-page {
   padding-block: 8rem 5rem;
 }
 
-.projects-intro {
+.projects-intro,
+.archive-intro {
   max-width: 720px;
   margin-bottom: 2rem;
 }
 
-.project-collection {
+.project-collection,
+.archive-timeline,
+.archive-months,
+.archive-items {
   display: grid;
+}
+
+.project-collection {
   gap: 2.5rem;
+}
+
+.archive-timeline {
+  gap: 3rem;
+}
+
+.archive-months {
+  gap: 1.5rem;
+}
+
+.archive-items {
+  gap: 0.25rem;
+}
+
+.archive-item {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 1rem;
 }
 
 .featured-project-grid {
@@ -402,6 +428,23 @@ main {
   .project-compact-item {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .archive-item {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 0.7rem;
+  }
+
+  .tag-filter {
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .tag-filter::-webkit-scrollbar {
+    display: none;
   }
 
   .article-illustration {
