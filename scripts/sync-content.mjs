@@ -165,7 +165,10 @@ function validateBackgrounds(backgrounds) {
 }
 
 function validateProjectState(projectState) {
-  assertAllowedKeys(projectState, ['emptyTitle', 'emptyDescription'], 'projectState');
+  assertAllowedKeys(projectState, ['enabled', 'emptyTitle', 'emptyDescription'], 'projectState');
+  if (projectState.enabled !== undefined && typeof projectState.enabled !== 'boolean') {
+    throw new Error('projectState.enabled must be a boolean.');
+  }
   assertString(projectState.emptyTitle, 'projectState.emptyTitle');
   if (typeof projectState.emptyDescription !== 'string') {
     throw new Error('projectState.emptyDescription must be a string.');

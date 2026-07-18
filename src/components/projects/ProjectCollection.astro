@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { projectState } from '../../config/content';
+import { contentSlug, projectStatusLabel } from '../../lib/content';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+const enabled = projectState.enabled ?? false;
+const visibleProjects = enabled ? projects : [];
+const featured = visibleProjects.filter((project) => project.data.featured);
+const standard = visibleProjects.filter((project) => !project.data.featured);
+---
+
+{visibleProjects.length === 0 ? (
+  <section class="project-empty" aria-labelledby="project-empty-title">
+    <span class="handwritten magazine-empty-label">In progress</span>
+    <h2 id="project-empty-title">{projectState.emptyTitle}</h2>
+    {projectState.emptyDescription && <p>{projectState.emptyDescription}</p>}
+    <div class="project-count"><strong>{projects.length}</strong><span>项目条目</span></div>
+  </section>
+) : (
+  <div class="project-collection">
+    {featured.length > 0 && (
+      <section aria-labelledby="featured-projects-title">
+        <div class="section-heading">
+          <span class="card-kicker">FEATURED</span>
+          <h2 id="featured-projects-title">精选项目</h2>
+        </div>
+        <div class="featured-project-grid">
+          {featured.map((project) => (
+            <article class="featured-project-card">
+              <a href={`/projects/${contentSlug(project.id)}/`}>
+                <div class:list={['project-cover', { 'project-cover-fallback': !project.data.cover }]}>
+                  {project.data.cover ? (
+                    <img
+                      src={project.data.cover.src}
+                      alt=""
+                      width={project.data.cover.width}
+                      height={project.data.cover.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <svg viewBox="0 0 48 48" aria-hidden="true">
+                      <path d="M10 12h28v24H10zM16 19h16M16 25h10" />
+                    </svg>
+                  )}
+                </div>
+                <div class="featured-project-copy">
+                  <span class="pill">{projectStatusLabel(project.data.status)}</span>
+                  <h3>{project.data.title}</h3>
+                  <p>{project.data.summary}</p>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {standard.length > 0 && (
+      <section aria-labelledby="other-projects-title">
+        <div class="section-heading">
+          <span class="card-kicker">MORE WORK</span>
+          <h2 id="other-projects-title">其他项目</h2>
+        </div>
+        <div class="project-compact-list">
+          {standard.map((project) => (
+            <a class="project-compact-item" href={`/projects/${contentSlug(project.id)}/`}>
+              <div>
+                <h3>{project.data.title}</h3>
+                <p>{project.data.summary}</p>
+              </div>
+              <span class="pill">{projectStatusLabel(project.data.status)}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+)}

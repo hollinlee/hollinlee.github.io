@@ -40,6 +40,7 @@ export type SiteData = {
 };
 
 export type ProjectStateData = {
+  enabled?: boolean;
   emptyTitle: string;
   emptyDescription: string;
 };

@@ -26,9 +26,10 @@ const notes = defineCollection({
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     summary: z.string(),
+    cover: image().optional(),
     status: z.enum(['active', 'experimental', 'maintained', 'archived']),
     featured: z.boolean().default(false),
     order: z.number().default(99),
