@@ -1,18 +1,19 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleMagazine from '../components/articles/ArticleMagazine.astro';
 import BackgroundRotator from '../components/hero/BackgroundRotator.astro';
 import NightParticles from '../components/effects/NightParticles.astro';
 import SakuraLayer from '../components/effects/SakuraLayer.astro';
 import ProfileCard from '../components/profile/ProfileCard.astro';
 import { site } from '../config/site';
-import { contentSlug, formatDate, projectStatusLabel } from '../lib/content';
 
 const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const featuredProject = allProjects.find((item) => item.data.featured) ?? allProjects[0];
 const allPosts = (await getCollection('posts'))
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
-const posts = allPosts.slice(0, 4);
+const featuredWithCovers = allPosts.filter((post) => post.data.featured && post.data.cover);
+const featuredIds = new Set(featuredWithCovers.map((post) => post.id));
+const posts = [...featuredWithCovers, ...allPosts.filter((post) => !featuredIds.has(post.id))].slice(0, 5);
 const notes = await getCollection('notes');
 ---
 
@@ -35,51 +36,7 @@ const notes = await getCollection('notes');
       <ProfileCard articleCount={allPosts.length} projectCount={allProjects.length} noteCount={notes.length} />
 
       <div class="main-feed">
-        <section class="welcome-card glass-card">
-          <div class="card-kicker">HELLO, TRAVELER</div>
-          <h2>欢迎来到 {site.name} 的主页。</h2>
-          <p>{site.hero.description}</p>
-          <div class="focus-tags">
-            {site.focus.map((item) => <span class="pill">{item}</span>)}
-          </div>
-        </section>
-
-        {featuredProject && (
-          <a class="widget project-banner content-card" href={`/projects/${contentSlug(featuredProject.id)}/`}>
-            <div class="card-kicker">FEATURED PROJECT</div>
-            <h3>{featuredProject.data.title}</h3>
-            <p>{featuredProject.data.summary}</p>
-            <div class="focus-tags">
-              <span class="pill">{projectStatusLabel(featuredProject.data.status)}</span>
-              {featuredProject.data.stack.slice(0, 4).map((item) => <span class="pill">{item}</span>)}
-            </div>
-          </a>
-        )}
-
-        <section class="feed-section content-card">
-          <div class="feed-head">
-            <div><div class="card-kicker">LATEST WRITING</div><h2>最近文章</h2></div>
-            <a class="feed-more" href="/blog/">全部文章 →</a>
-          </div>
-          <div class="article-list">
-            {posts.map((post, index) => (
-              <a class="article-card" href={`/blog/${contentSlug(post.id)}/`}>
-                <div>
-                  <div class="article-meta"><span>{formatDate(post.data.publishedAt)}</span><span>·</span><span>{post.data.tags.slice(0, 2).join(' / ')}</span></div>
-                  <h3>{post.data.title}</h3>
-                  <p>{post.data.description}</p>
-                </div>
-                <div class="article-illustration" aria-hidden="true">{['✦', '☁', '⌘', '☆'][index % 4]}</div>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <a class="widget content-card" href="/about/">
-          <div class="card-kicker">ABOUT</div>
-          <h3>关于这个小站</h3>
-          <p>查看公开资料与联系方式。</p>
-        </a>
+        <ArticleMagazine posts={posts} />
       </div>
     </div>
   </div>

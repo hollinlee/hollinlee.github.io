@@ -128,10 +128,16 @@ function validateProfile(profile) {
 }
 
 function validateSite(site) {
-  assertAllowedKeys(site, ['title', 'subtitle', 'language'], 'site');
+  assertAllowedKeys(site, ['title', 'subtitle', 'language', 'emptyStates'], 'site');
   assertString(site.title, 'site.title');
   assertString(site.subtitle, 'site.subtitle');
   assertString(site.language, 'site.language');
+
+  if (site.emptyStates !== undefined) {
+    assertAllowedKeys(site.emptyStates, ['articlesTitle', 'articlesDescription'], 'site.emptyStates');
+    assertString(site.emptyStates.articlesTitle, 'site.emptyStates.articlesTitle');
+    assertString(site.emptyStates.articlesDescription, 'site.emptyStates.articlesDescription');
+  }
 }
 
 function validateBackgrounds(backgrounds) {

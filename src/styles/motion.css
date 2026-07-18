@@ -54,6 +54,13 @@
   .night-particles {
     display: none;
   }
+
+  .magazine-card:hover,
+  .magazine-card:focus-within,
+  .magazine-card:hover .magazine-media img,
+  .magazine-card:focus-within .magazine-media img {
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-transparency: reduce) {

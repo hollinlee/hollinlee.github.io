@@ -1,0 +1,68 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { siteMetadata } from '../../config/content';
+import { contentSlug, formatDate } from '../../lib/content';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+}
+
+const { posts } = Astro.props;
+const defaultCover = '/content-assets/article-covers/default.webp';
+const emptyState = siteMetadata.emptyStates ?? {
+  articlesTitle: '暂无公开文章',
+  articlesDescription: '发布第一篇文章后，它会出现在这里。',
+};
+---
+
+<section class="magazine-section" aria-labelledby="latest-writing-title">
+  <div class="magazine-heading">
+    <div>
+      <span class="card-kicker">LATEST WRITING</span>
+      <h2 id="latest-writing-title">最近文章</h2>
+    </div>
+    <a class="magazine-more" href="/blog/">查看归档 <span aria-hidden="true">→</span></a>
+  </div>
+
+  {posts.length > 0 ? (
+    <div class="magazine-grid">
+      {posts.map((post, index) => {
+        const cover = post.data.cover;
+        const coverSrc = cover?.src ?? defaultCover;
+        const coverWidth = cover?.width ?? 1600;
+        const coverHeight = cover?.height ?? 900;
+        return (
+          <article class:list={['magazine-card', { 'magazine-card-lead': index === 0 }]}>
+            <a href={`/blog/${contentSlug(post.id)}/`}>
+              <div class="magazine-media">
+                <img
+                  src={coverSrc}
+                  alt=""
+                  width={coverWidth}
+                  height={coverHeight}
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchpriority={index === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                />
+              </div>
+              <div class="magazine-copy">
+                <div class="article-meta">
+                  <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>
+                  {post.data.tags.slice(0, 3).map((tag) => <span>#{tag}</span>)}
+                </div>
+                <h3>{post.data.title}</h3>
+                <p>{post.data.description}</p>
+              </div>
+            </a>
+          </article>
+        );
+      })}
+    </div>
+  ) : (
+    <div class="magazine-empty">
+      <span class="handwritten magazine-empty-label">Coming soon</span>
+      <h3>{emptyState.articlesTitle}</h3>
+      <p>{emptyState.articlesDescription}</p>
+    </div>
+  )}
+</section>
