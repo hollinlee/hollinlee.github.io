@@ -1,0 +1,43 @@
+@import 'lxgw-wenkai-screen-webfont/lxgwwenkaigbscreen.css';
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/noto-sans-sc/files/noto-sans-sc-chinese-simplified-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('@fontsource/noto-sans-sc/files/noto-sans-sc-chinese-simplified-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Caveat';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('@fontsource/caveat/files/caveat-latin-600-normal.woff2') format('woff2');
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+.display-type {
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+.handwritten,
+.card-kicker,
+.eyebrow {
+  font-family: var(--font-handwritten);
+}

@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Style Preview" description="日夜主题与字体预览">
+  <section class="style-preview container">
+    <span class="eyebrow">STYLE PREVIEW</span>
+    <h1 class="display-type">樱花幻想与暗夜霓虹</h1>
+    <p>用于检查主题 tokens、字体角色、透明 surface 和键盘 focus，不代表最终页面结构。</p>
+
+    <div class="style-preview-grid">
+      <article class="style-preview-panel" data-preview-theme="day">
+        <span class="style-preview-sticker">Sakura day</span>
+        <h2>柔和，但保持清晰</h2>
+        <p>中文正文使用 Noto Sans SC。标题使用霞鹜文楷屏幕阅读版，长内容维持稳定行高和对比度。</p>
+        <div class="style-surface-glass">
+          <span class="card-kicker">DAY SURFACE</span>
+          <h3>樱花色只承担强调</h3>
+          <p>卡片依赖轻微材质差异，不使用硬边框和工业阴影。</p>
+          <a class="button primary" href="#night-preview">检查 Focus</a>
+        </div>
+      </article>
+
+      <article class="style-preview-panel" data-preview-theme="night" id="night-preview">
+        <span class="style-preview-sticker">Neon night</span>
+        <h2>暗夜不是纯黑</h2>
+        <p>深靛蓝承载正文，粉色与天蓝只作为克制的霓虹点缀。</p>
+        <div class="style-surface-glass">
+          <span class="card-kicker">NIGHT SURFACE</span>
+          <h3>透明度需要稳定 fallback</h3>
+          <p>开启 reduced transparency 后，内容 surface 会切换为不透明底色。</p>
+          <a class="button" href="#">返回顶部</a>
+        </div>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
