@@ -1,0 +1,18 @@
+---
+const particles = Array.from({ length: 12 }, (_, index) => ({
+  left: (index * 43 + 7) % 97,
+  top: (index * 29 + 13) % 83,
+  delay: -((index * 0.8) % 6),
+  duration: 3.8 + (index % 4) * 1.1,
+  size: 2 + (index % 3),
+}));
+---
+
+<div class="night-particles" aria-hidden="true">
+  {particles.map((particle) => (
+    <span
+      class="night-particle"
+      style={`--particle-left:${particle.left}%;--particle-top:${particle.top}%;--particle-delay:${particle.delay}s;--particle-duration:${particle.duration}s;--particle-size:${particle.size}px`}
+    ></span>
+  ))}
+</div>
