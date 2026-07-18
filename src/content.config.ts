@@ -12,8 +12,9 @@ const commonArticle = {
 
 const posts = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     ...commonArticle,
+    cover: image().optional(),
     featured: z.boolean().default(false),
   }),
 });

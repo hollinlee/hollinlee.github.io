@@ -6,6 +6,7 @@ tags:
   - personal-website
   - build-in-public
 lang: zh-CN
+cover: ./cover.svg
 featured: true
 ---
 

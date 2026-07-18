@@ -33,6 +33,10 @@ export type SiteData = {
   title: string;
   subtitle: string;
   language: string;
+  emptyStates?: {
+    articlesTitle: string;
+    articlesDescription: string;
+  };
 };
 
 export type ProjectStateData = {

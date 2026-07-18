@@ -717,6 +717,122 @@
   margin: 0.25rem 0;
 }
 
+.magazine-heading h2 {
+  margin: 0.25rem 0 0;
+  color: var(--text-strong);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+.magazine-more {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.magazine-more:hover {
+  color: var(--accent-primary);
+}
+
+.magazine-card {
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-soft);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.magazine-card:hover,
+.magazine-card:focus-within {
+  box-shadow: var(--shadow-raised);
+  transform: translateY(-3px);
+}
+
+.magazine-card > a {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.magazine-media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--surface-muted);
+}
+
+.magazine-card-lead .magazine-media {
+  aspect-ratio: 16 / 7;
+}
+
+.magazine-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.magazine-card:hover .magazine-media img,
+.magazine-card:focus-within .magazine-media img {
+  transform: scale(1.025);
+}
+
+.magazine-copy {
+  padding: clamp(1rem, 3vw, 1.4rem);
+}
+
+.magazine-copy .article-meta {
+  gap: 0.6rem;
+}
+
+.magazine-copy h3 {
+  margin: 0.55rem 0 0.45rem;
+  color: var(--text-strong);
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.magazine-card-lead .magazine-copy h3 {
+  font-size: clamp(1.55rem, 4vw, 2.25rem);
+}
+
+.magazine-copy p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+.magazine-empty {
+  min-height: 280px;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-soft);
+}
+
+.magazine-empty-label {
+  color: var(--accent-sakura);
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.magazine-empty h3 {
+  margin: 0.4rem 0;
+  color: var(--text-strong);
+  font-size: 1.6rem;
+}
+
+.magazine-empty p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
 .site-footer {
   padding: 2rem 0;
   border-top: 1px solid var(--border-subtle);
