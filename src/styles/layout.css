@@ -227,7 +227,9 @@ main {
 }
 
 .projects-page,
-.archive-page {
+.archive-page,
+.about-page,
+.not-found-page {
   padding-block: 8rem 5rem;
 }
 
@@ -235,6 +237,13 @@ main {
 .archive-intro {
   max-width: 720px;
   margin-bottom: 2rem;
+}
+
+.about-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 2rem;
+  align-items: start;
 }
 
 .project-collection,
@@ -376,11 +385,13 @@ main {
     margin-top: -70px;
   }
 
-  .home-grid {
+  .home-grid,
+  .about-layout {
     grid-template-columns: 1fr;
   }
 
-  .profile-card {
+  .profile-card,
+  .about-profile {
     position: relative;
     top: auto;
     width: min(100%, 360px);
