@@ -33,7 +33,7 @@ const canonical = new URL(Astro.url.pathname, site.url);
       <nav class="container nav" aria-label="主导航">
         <a class="brand" href="/">
           <img class="brand-avatar" src={site.avatar} alt="" width="38" height="38" />
-          <span class="brand-copy">{site.nickname}<small>@{site.handle}</small></span>
+          <span class="brand-copy">{site.name}<small>@{site.handle}</small></span>
         </a>
         <div class="nav-links">
           <a href="/projects/">项目</a>
@@ -45,7 +45,7 @@ const canonical = new URL(Astro.url.pathname, site.url);
     </header>
     <main><slot /></main>
     <footer class="site-footer">
-      <div class="container">© {new Date().getFullYear()} {site.name} · 持续构建，公开记录。</div>
+      <div class="container">© {new Date().getFullYear()} {site.name}</div>
     </footer>
   </body>
 </html>

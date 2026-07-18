@@ -22,6 +22,7 @@ pnpm-debug.log*
 .content-source/
 src/content/
 src/content-data/
+public/content-assets/
 
 # macOS-specific files
 .DS_Store

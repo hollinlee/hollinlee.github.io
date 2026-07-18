@@ -20,8 +20,8 @@ const nowEntry = nowEntries[0];
     <div class="container hero-inner">
       <div class="hero-copy">
         <span class="hero-badge">欢迎来到我的小站</span>
-        <h1>唐猫爱吃鱼<span>の 小站</span></h1>
-        <p>勇者的小队在此集合，出发！这里记录 AI developer tooling、编译器、系统编程和一路上的思考。</p>
+        <h1>{site.title}</h1>
+        <p>{site.description}</p>
         <div class="hero-actions">
           <a class="button primary" href="/blog/">开始阅读</a>
           <a class="button" href="/projects/">看看项目</a>
@@ -36,13 +36,12 @@ const nowEntry = nowEntries[0];
     <div class="container home-grid">
       <aside class="profile-card">
         <div class="profile-avatar-wrap">
-          <img class="profile-avatar" src={site.avatar} alt="唐猫爱吃鱼的头像" width="720" height="720" />
+          <img class="profile-avatar" src={site.avatar} alt={`${site.name} 的头像`} width="720" height="720" />
         </div>
         <div>
-          <h2>{site.nickname}</h2>
+          <h2>{site.name}</h2>
           <div class="profile-handle">@{site.handle}</div>
           <div class="profile-divider"></div>
-          <p class="profile-bio">构建实用的 AI 开发工具，也在持续学习编译器与系统编程。</p>
         </div>
         <div class="profile-stats" aria-label="内容统计">
           <div class="profile-stat"><strong>{allPosts.length}</strong><span>文章</span></div>
@@ -58,8 +57,8 @@ const nowEntry = nowEntries[0];
       <div class="main-feed">
         <section class="welcome-card glass-card">
           <div class="card-kicker">HELLO, TRAVELER</div>
-          <h2>你好，我是 Hollin。</h2>
-          <p>{site.hero.description} 这个网站是我的公开索引，也是保存项目、文章与技术笔记的小小据点。</p>
+          <h2>欢迎来到 {site.name} 的主页。</h2>
+          <p>{site.hero.description}</p>
           <div class="focus-tags">
             {site.focus.map((item) => <span class="pill">{item}</span>)}
           </div>
@@ -100,12 +99,12 @@ const nowEntry = nowEntries[0];
           <a class="widget content-card" href="/now/">
             <div class="card-kicker">NOW</div>
             <h3>最近在做什么</h3>
-            <div class="now-lines">
-              <div class="now-line">重建个人主页和内容系统</div>
-              <div class="now-line">改进 AI developer tooling</div>
-              <div class="now-line">学习编译器与系统编程</div>
-            </div>
-            {nowEntry && <p style="margin-top: .9rem;">更新于 {formatDate(nowEntry.data.updatedAt)}</p>}
+            {nowEntry ? (
+              <>
+                <p>{nowEntry.data.description}</p>
+                <p style="margin-top: .9rem;">更新于 {formatDate(nowEntry.data.updatedAt)}</p>
+              </>
+            ) : <p>暂无公开近况。</p>}
           </a>
 
           <a class="widget content-card" href="/about/">
