@@ -1,0 +1,13 @@
+rotationInterval: 40000
+transitionDuration: 2200
+blur: 8
+
+day:
+  - image: "/content-assets/backgrounds/day/example-day.svg"
+    textPosition: "left"
+    backgroundPosition: "center"
+
+night:
+  - image: "/content-assets/backgrounds/night/example-night.svg"
+    textPosition: "left"
+    backgroundPosition: "center"
