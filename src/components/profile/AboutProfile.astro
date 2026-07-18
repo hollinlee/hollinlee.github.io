@@ -1,0 +1,17 @@
+---
+import { profile } from '../../config/content';
+import ContactLinks from './ContactLinks.astro';
+---
+
+<aside class="about-profile" aria-labelledby="about-profile-name">
+  <img
+    class="about-profile-avatar"
+    src={profile.avatar}
+    alt={`${profile.name} 的头像`}
+    width="720"
+    height="720"
+  />
+  <h2 id="about-profile-name">{profile.name}</h2>
+  <p>@{profile.handle}</p>
+  <ContactLinks class="about-contact-links" />
+</aside>

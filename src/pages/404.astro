@@ -1,12 +1,14 @@
 ---
+import { site } from '../config/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="页面未找到 — Hollin Lee" description="无法找到请求的页面。">
-  <section class="prose">
-    <div class="eyebrow">404</div>
-    <h1>没有找到这个页面。</h1>
-    <p class="lede">页面可能已经移动，也可能从未存在。</p>
-    <div class="actions"><a class="button primary" href="/">返回首页</a></div>
+<BaseLayout title={`页面未找到 — ${site.name}`} description="无法找到请求的页面。">
+  <section class="not-found-page container">
+    <div class="not-found-code" aria-hidden="true">404</div>
+    <span class="handwritten not-found-label">Lost in the night</span>
+    <h1>没有找到这个页面</h1>
+    <p>页面可能已经移动，也可能从未存在。</p>
+    <a class="button primary" href="/">返回首页</a>
   </section>
 </BaseLayout>

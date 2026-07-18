@@ -1,21 +1,27 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import AboutProfile from '../../components/profile/AboutProfile.astro';
 import { site } from '../../config/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { contentSlug } from '../../lib/content';
+
+const about = (await getCollection('pages')).find((page) => contentSlug(page.id) === 'about');
+if (!about) throw new Error('Required published About page was not found.');
+const { Content } = await render(about);
 ---
 
-<BaseLayout title="关于 — Hollin Lee" description="关于 Hollin Lee，以及这个网站存在的原因。">
-  <article class="prose">
-    <div class="eyebrow">关于</div>
-    <h1>做有用的东西，记录背后的决策。</h1>
-    <p class="lede">{site.description}</p>
+<BaseLayout title={`${about.data.title} — ${site.name}`} description={about.data.description || site.description}>
+  <section class="about-page container">
+    <header class="about-heading">
+      <span class="eyebrow">ABOUT</span>
+      <h1>{about.data.title}</h1>
+    </header>
 
-    <h2>这个网站用来做什么</h2>
-    <p>这里是我工作的公开索引：项目提供可以验证的成果，文章解释思考和决策，近况页面记录当前方向。</p>
-
-    <h2>当前关注</h2>
-    <ul>{site.focus.map((item) => <li>{item}</li>)}</ul>
-
-    <h2>联系我</h2>
-    <p><a href={site.github}>GitHub</a>{site.email && <> · <a href={`mailto:${site.email}`}>Email</a></>}</p>
-  </article>
+    <div class="about-layout">
+      <AboutProfile />
+      <article class="about-body prose-content">
+        <Content />
+      </article>
+    </div>
+  </section>
 </BaseLayout>
