@@ -6,6 +6,7 @@ import BackgroundRotator from '../components/hero/BackgroundRotator.astro';
 import NightParticles from '../components/effects/NightParticles.astro';
 import SakuraLayer from '../components/effects/SakuraLayer.astro';
 import ProfileCard from '../components/profile/ProfileCard.astro';
+import ProjectSummary from '../components/projects/ProjectSummary.astro';
 import { site } from '../config/site';
 
 const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -37,6 +38,7 @@ const notes = await getCollection('notes');
 
       <div class="main-feed">
         <ArticleMagazine posts={posts} />
+        <ProjectSummary count={allProjects.length} />
       </div>
     </div>
   </div>

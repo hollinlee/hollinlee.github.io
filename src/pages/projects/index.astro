@@ -1,27 +1,19 @@
 ---
 import { getCollection } from 'astro:content';
+import ProjectCollection from '../../components/projects/ProjectCollection.astro';
+import { site } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { contentSlug, projectStatusLabel } from '../../lib/content';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<BaseLayout title="项目 — Hollin Lee" description="代表项目与工程实践案例。">
-  <section class="prose">
-    <div class="eyebrow">代表作品</div>
-    <h1>用项目证明做过什么。</h1>
-    <p class="lede">每个项目都记录问题、决策、实现和复盘，而不只是提供一个 repository 链接。</p>
-    <div class="grid">
-      {projects.map((project) => (
-        <a class="card" href={`/projects/${contentSlug(project.id)}/`}>
-          <span class="pill">{projectStatusLabel(project.data.status)}</span>
-          <h3>{project.data.title}</h3>
-          <p>{project.data.summary}</p>
-          <div class="card-footer">
-            {project.data.stack.map((item) => <span class="pill">{item}</span>)}
-          </div>
-        </a>
-      ))}
-    </div>
+<BaseLayout title={`项目 — ${site.name}`} description="公开项目与工程实践。">
+  <section class="projects-page container">
+    <header class="projects-intro">
+      <span class="eyebrow">PROJECTS</span>
+      <h1>项目</h1>
+      <p>这里展示明确发布的项目内容。</p>
+    </header>
+    <ProjectCollection projects={projects} />
   </section>
 </BaseLayout>

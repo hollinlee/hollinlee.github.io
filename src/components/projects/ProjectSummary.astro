@@ -1,0 +1,27 @@
+---
+import { projectState } from '../../config/content';
+
+interface Props {
+  count: number;
+}
+
+const { count } = Astro.props;
+const hasVisibleProjects = (projectState.enabled ?? false) && count > 0;
+const stateTitle = hasVisibleProjects ? '已公开项目' : projectState.emptyTitle;
+const stateDescription = hasVisibleProjects ? '' : projectState.emptyDescription;
+---
+
+<section class="project-summary" aria-labelledby="home-projects-title">
+  <div>
+    <span class="card-kicker">PROJECTS</span>
+    <h2 id="home-projects-title">项目</h2>
+  </div>
+  <div class="project-summary-state">
+    <strong>{count}</strong>
+    <div>
+      <h3>{stateTitle}</h3>
+      {stateDescription && <p>{stateDescription}</p>}
+    </div>
+  </div>
+  <a class="magazine-more" href="/projects/">查看项目页 <span aria-hidden="true">→</span></a>
+</section>

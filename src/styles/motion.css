@@ -58,7 +58,9 @@
   .magazine-card:hover,
   .magazine-card:focus-within,
   .magazine-card:hover .magazine-media img,
-  .magazine-card:focus-within .magazine-media img {
+  .magazine-card:focus-within .magazine-media img,
+  .featured-project-card:hover,
+  .featured-project-card:focus-within {
     transform: none;
   }
 }

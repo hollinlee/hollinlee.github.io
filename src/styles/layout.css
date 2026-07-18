@@ -226,6 +226,39 @@ main {
   gap: 0.6rem;
 }
 
+.projects-page {
+  padding-block: 8rem 5rem;
+}
+
+.projects-intro {
+  max-width: 720px;
+  margin-bottom: 2rem;
+}
+
+.project-collection {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.featured-project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.project-compact-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.project-compact-item,
+.project-summary-state {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .prose {
   width: min(calc(100% - 2rem), 790px);
   margin: 0 auto;
@@ -336,7 +369,8 @@ main {
     grid-template-columns: 1fr 100px;
   }
 
-  .magazine-grid {
+  .magazine-grid,
+  .featured-project-grid {
     grid-template-columns: 1fr;
   }
 
@@ -364,7 +398,8 @@ main {
     grid-template-columns: 1fr;
   }
 
-  .magazine-heading {
+  .magazine-heading,
+  .project-compact-item {
     align-items: flex-start;
     flex-direction: column;
   }

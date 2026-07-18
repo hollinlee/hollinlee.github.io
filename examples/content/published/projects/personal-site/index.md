@@ -1,6 +1,7 @@
 ---
 title: "可 Fork 的个人主页"
 summary: "一个 Astro 个人主页模板，可以安全地从 Private content repository 中拉取公开 Markdown 内容。"
+cover: ./cover.svg
 status: active
 featured: true
 order: 1
