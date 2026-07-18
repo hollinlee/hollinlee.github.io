@@ -1,4 +1,4 @@
-<button class="theme-toggle" type="button" data-theme-toggle aria-label="切换到夜间模式" title="切换到夜间模式">
+<button class="theme-toggle" type="button" data-theme-toggle data-tooltip="切换到夜间模式" aria-label="切换到夜间模式" title="切换到夜间模式">
   <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
     <path d="M20.2 15.4A8.6 8.6 0 0 1 8.6 3.8 8.7 8.7 0 1 0 20.2 15.4Z" />
   </svg>
@@ -36,6 +36,7 @@
     const next = currentTheme() === 'night' ? '日间' : '夜间';
     const label = `切换到${next}模式`;
     button.setAttribute('aria-label', label);
+    button.dataset.tooltip = label;
     button.title = label;
   }
 

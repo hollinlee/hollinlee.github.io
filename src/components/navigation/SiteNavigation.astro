@@ -1,0 +1,47 @@
+---
+import ThemeToggle from '../theme/ThemeToggle.astro';
+import { site } from '../../config/site';
+
+interface Props {
+  pathname: string;
+}
+
+const { pathname } = Astro.props;
+const links = [
+  { href: '/', label: '首页', match: (path: string) => path === '/' },
+  { href: '/projects/', label: '项目', match: (path: string) => path.startsWith('/projects') },
+  { href: '/blog/', label: '归档', match: (path: string) => path.startsWith('/blog') || path.startsWith('/notes') || path.startsWith('/archive') },
+  { href: '/about/', label: '关于', match: (path: string) => path.startsWith('/about') },
+];
+---
+
+<header class="site-header">
+  <nav class="container nav" aria-label="主导航">
+    <a class="brand" href="/" aria-label={`${site.name} 首页`}>
+      <img class="brand-avatar" src={site.avatar} alt="" width="38" height="38" />
+      <span class="brand-copy">{site.name}<small>@{site.handle}</small></span>
+    </a>
+
+    <div class="nav-desktop-links" aria-label="页面导航">
+      {links.map((link) => (
+        <a href={link.href} aria-current={link.match(pathname) ? 'page' : undefined}>{link.label}</a>
+      ))}
+    </div>
+
+    <div class="nav-actions">
+      <details class="nav-menu">
+        <summary aria-label="打开导航菜单" title="导航菜单">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 7h14M5 12h14M5 17h14" />
+          </svg>
+        </summary>
+        <div class="nav-menu-panel">
+          {links.map((link) => (
+            <a href={link.href} aria-current={link.match(pathname) ? 'page' : undefined}>{link.label}</a>
+          ))}
+        </div>
+      </details>
+      <ThemeToggle />
+    </div>
+  </nav>
+</header>
