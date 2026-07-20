@@ -50,15 +50,6 @@ const logs = defineCollection({
   }),
 });
 
-const now = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/now' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    updatedAt: z.coerce.date(),
-  }),
-});
-
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/pages' }),
   schema: z.object({
@@ -67,4 +58,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { posts, notes, projects, logs, now, pages };
+export const collections = { posts, notes, projects, logs, pages };
