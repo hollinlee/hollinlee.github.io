@@ -2,6 +2,7 @@
 import { backgrounds } from '../../config/content';
 
 const serialized = JSON.stringify(backgrounds);
+const initial = backgrounds.items[0];
 ---
 
 <div
@@ -11,12 +12,24 @@ const serialized = JSON.stringify(backgrounds);
   style={`--hero-blur:${backgrounds.blur}px;--hero-transition:${backgrounds.transitionDuration}ms`}
   aria-hidden="true"
 >
-  <div class="hero-background-layer is-active" data-background-layer="0"></div>
+  <div
+    class="hero-background-layer is-active"
+    data-background-layer="0"
+    style={`background-image:var(--initial-background-image, url(${JSON.stringify(initial.image)}));background-position:var(--initial-background-position, ${initial.backgroundPosition})`}
+  ></div>
   <div class="hero-background-layer" data-background-layer="1"></div>
   <div class="hero-background-overlay"></div>
 </div>
 
 <script>
+  import {
+    BACKGROUND_STORAGE_KEY,
+    advanceRotationState,
+    backgroundSignature,
+    createRotationState,
+    parseRotationState,
+  } from '../../lib/background-rotation.mjs';
+
   type BackgroundEntry = {
     image: string;
     textPosition: 'left' | 'right' | 'center';
@@ -27,20 +40,49 @@ const serialized = JSON.stringify(backgrounds);
     transitionDuration: number;
     items: BackgroundEntry[];
   };
+  type RotationState = ReturnType<typeof createRotationState>;
 
   document.querySelectorAll<HTMLElement>('[data-background-rotator]').forEach((root) => {
     const hero = document.querySelector<HTMLElement>('[data-background-text-target]');
     const layers = Array.from(root.querySelectorAll<HTMLElement>('[data-background-layer]'));
     const config = JSON.parse(root.dataset.backgrounds ?? '{}') as BackgroundConfig;
+    const entries = config.items ?? [];
+    if (entries.length === 0 || layers.length < 2) return;
+
+    const signature = backgroundSignature(entries);
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-    let index = 0;
+    let state = restoreState() ?? createRotationState(entries.length, signature, config.rotationInterval) as RotationState;
     let activeLayer = 0;
     let timer: number | undefined;
     let generation = 0;
 
-    const pool = () => config.items ?? [];
+    function storedState() {
+      try {
+        return sessionStorage.getItem(BACKGROUND_STORAGE_KEY);
+      } catch {
+        return null;
+      }
+    }
+
+    function restoreState() {
+      return parseRotationState(
+        storedState(),
+        signature,
+        entries.length,
+        config.rotationInterval,
+      ) as RotationState | null;
+    }
+
+    function persistState() {
+      try {
+        sessionStorage.setItem(BACKGROUND_STORAGE_KEY, JSON.stringify(state));
+      } catch {
+        // Rotation remains functional when session storage is unavailable.
+      }
+    }
 
     function updateTextPosition(entry: BackgroundEntry) {
+      document.documentElement.dataset.backgroundTextPosition = entry.textPosition;
       if (hero) hero.dataset.textPosition = entry.textPosition;
     }
 
@@ -63,20 +105,46 @@ const serialized = JSON.stringify(backgrounds);
       timer = undefined;
     }
 
-    function schedule() {
+    function pauseTimer() {
       clearTimer();
-      if (document.hidden || reducedMotion.matches || pool().length < 2) return;
-      timer = window.setTimeout(() => void showNext(), config.rotationInterval);
+      if (state.nextAt !== null) {
+        state.remainingMs = Math.max(0, Math.min(state.nextAt - Date.now(), config.rotationInterval));
+        state.nextAt = null;
+        persistState();
+      }
+    }
+
+    function schedule(preserveDeadline = false) {
+      clearTimer();
+      if (document.hidden || reducedMotion.matches || entries.length < 2) {
+        pauseTimer();
+        return;
+      }
+
+      const remaining = preserveDeadline && state.nextAt !== null
+        ? Math.max(0, state.nextAt - Date.now())
+        : state.remainingMs;
+      state.remainingMs = remaining;
+      if (!preserveDeadline || state.nextAt === null) state.nextAt = Date.now() + remaining;
+      persistState();
+      timer = window.setTimeout(() => void showNext(), remaining);
     }
 
     async function showNext() {
-      const entries = pool();
-      if (entries.length < 2) return;
-      const nextIndex = (index + 1) % entries.length;
-      const entry = entries[nextIndex];
+      clearTimer();
+      if (document.hidden || reducedMotion.matches) {
+        pauseTimer();
+        return;
+      }
+      const nextState = advanceRotationState(
+        state,
+        entries.length,
+        config.rotationInterval,
+      ) as RotationState;
+      const entry = entries[nextState.current];
       const requestGeneration = generation;
       await preload(entry);
-      if (requestGeneration !== generation || document.hidden) return;
+      if (requestGeneration !== generation || document.hidden || reducedMotion.matches) return;
 
       const nextLayer = activeLayer === 0 ? 1 : 0;
       setLayer(layers[nextLayer], entry);
@@ -85,33 +153,32 @@ const serialized = JSON.stringify(backgrounds);
         layers[nextLayer].classList.add('is-active');
         layers[activeLayer].classList.remove('is-active');
         activeLayer = nextLayer;
-        index = nextIndex;
+        state = nextState;
+        persistState();
         schedule();
       });
     }
 
-    async function reset() {
-      const requestGeneration = generation + 1;
-      generation = requestGeneration;
+    async function start() {
+      generation += 1;
       clearTimer();
-      index = 0;
-      const entry = pool()[0];
-      if (!entry) return;
+      const entry = entries[state.current];
       await preload(entry);
-      if (requestGeneration !== generation) return;
       setLayer(layers[activeLayer], entry);
-      layers[activeLayer].classList.add('is-active');
-      layers[activeLayer === 0 ? 1 : 0].classList.remove('is-active');
       updateTextPosition(entry);
-      schedule();
+      persistState();
+      schedule(state.nextAt !== null);
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) clearTimer();
+      if (document.hidden) pauseTimer();
       else schedule();
     });
 
-    reducedMotion.addEventListener('change', schedule);
-    void reset();
+    reducedMotion.addEventListener('change', () => {
+      if (reducedMotion.matches) pauseTimer();
+      else schedule();
+    });
+    void start();
   });
 </script>

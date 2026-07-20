@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import NightParticles from '../components/effects/NightParticles.astro';
 import SakuraLayer from '../components/effects/SakuraLayer.astro';
+import BackgroundBootstrap from '../components/hero/BackgroundBootstrap.astro';
 import BackgroundRotator from '../components/hero/BackgroundRotator.astro';
 import ThemeScript from '../components/theme/ThemeScript.astro';
 import SiteNavigation from '../components/navigation/SiteNavigation.astro';
@@ -22,6 +23,7 @@ const canonical = new URL(Astro.url.pathname, site.url);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <ThemeScript />
+    <BackgroundBootstrap />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
