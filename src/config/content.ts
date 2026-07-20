@@ -25,8 +25,7 @@ export type BackgroundData = {
   rotationInterval: number;
   transitionDuration: number;
   blur: number;
-  day: BackgroundEntry[];
-  night: BackgroundEntry[];
+  items: BackgroundEntry[];
 };
 
 export type SiteData = {

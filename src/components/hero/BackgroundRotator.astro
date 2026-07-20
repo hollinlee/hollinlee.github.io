@@ -17,7 +17,6 @@ const serialized = JSON.stringify(backgrounds);
 </div>
 
 <script>
-  type Theme = 'day' | 'night';
   type BackgroundEntry = {
     image: string;
     textPosition: 'left' | 'right' | 'center';
@@ -26,8 +25,7 @@ const serialized = JSON.stringify(backgrounds);
   type BackgroundConfig = {
     rotationInterval: number;
     transitionDuration: number;
-    day: BackgroundEntry[];
-    night: BackgroundEntry[];
+    items: BackgroundEntry[];
   };
 
   document.querySelectorAll<HTMLElement>('[data-background-rotator]').forEach((root) => {
@@ -35,13 +33,12 @@ const serialized = JSON.stringify(backgrounds);
     const layers = Array.from(root.querySelectorAll<HTMLElement>('[data-background-layer]'));
     const config = JSON.parse(root.dataset.backgrounds ?? '{}') as BackgroundConfig;
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-    let theme: Theme = document.documentElement.dataset.theme === 'night' ? 'night' : 'day';
     let index = 0;
     let activeLayer = 0;
     let timer: number | undefined;
     let generation = 0;
 
-    const pool = () => config[theme] ?? [];
+    const pool = () => config.items ?? [];
 
     function updateTextPosition(entry: BackgroundEntry) {
       if (hero) hero.dataset.textPosition = entry.textPosition;
@@ -93,11 +90,10 @@ const serialized = JSON.stringify(backgrounds);
       });
     }
 
-    async function reset(nextTheme: Theme) {
+    async function reset() {
       const requestGeneration = generation + 1;
       generation = requestGeneration;
       clearTimer();
-      theme = nextTheme;
       index = 0;
       const entry = pool()[0];
       if (!entry) return;
@@ -110,16 +106,12 @@ const serialized = JSON.stringify(backgrounds);
       schedule();
     }
 
-    addEventListener('site-theme-change', ((event: CustomEvent<{ theme: Theme }>) => {
-      void reset(event.detail.theme);
-    }) as EventListener);
-
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) clearTimer();
       else schedule();
     });
 
     reducedMotion.addEventListener('change', schedule);
-    void reset(theme);
+    void reset();
   });
 </script>
