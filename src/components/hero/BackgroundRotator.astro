@@ -40,14 +40,7 @@ const initial = backgrounds.items[0];
     transitionDuration: number;
     items: BackgroundEntry[];
   };
-  type RotationState = {
-    version: number;
-    signature: string;
-    current: number;
-    queue: number[];
-    remainingMs: number;
-    nextAt: number | null;
-  };
+  type RotationState = ReturnType<typeof createRotationState>;
 
   document.querySelectorAll<HTMLElement>('[data-background-rotator]').forEach((root) => {
     const hero = document.querySelector<HTMLElement>('[data-background-text-target]');
@@ -139,6 +132,10 @@ const initial = backgrounds.items[0];
 
     async function showNext() {
       clearTimer();
+      if (document.hidden || reducedMotion.matches) {
+        pauseTimer();
+        return;
+      }
       const nextState = advanceRotationState(
         state,
         entries.length,
