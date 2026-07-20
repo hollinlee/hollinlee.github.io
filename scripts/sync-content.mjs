@@ -19,7 +19,7 @@ const astroDataStore = resolve(root, 'node_modules/.astro');
 const buildOutput = resolve(root, 'dist');
 const tempSource = resolve(root, '.content-source');
 const exampleSource = resolve(root, 'examples/content');
-const collections = ['posts', 'notes', 'projects', 'logs', 'now', 'pages'];
+const collections = ['posts', 'notes', 'projects', 'logs', 'pages'];
 
 loadLocalEnv();
 

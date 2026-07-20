@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../config/site';
 import { contentSlug, formatDate } from '../../lib/content';
 
 export async function getStaticPaths() {
@@ -12,7 +13,7 @@ const { note } = Astro.props;
 const { Content } = await render(note);
 ---
 
-<BaseLayout title={`${note.data.title} — Hollin Lee`} description={note.data.description}>
+<BaseLayout title={`${note.data.title} — ${site.name}`} description={note.data.description}>
   <article class="prose">
     <div class="eyebrow">技术笔记</div>
     <h1>{note.data.title}</h1>

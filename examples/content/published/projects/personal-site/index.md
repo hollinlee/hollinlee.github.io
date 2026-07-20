@@ -5,8 +5,8 @@ cover: ./cover.svg
 status: active
 featured: true
 order: 1
-repo: "https://github.com/hollinlee/hollinlee.github.io"
-demo: "https://hollinlee.github.io"
+repo: "https://github.com/example/forkable-personal-homepage"
+demo: "https://example.com"
 startedAt: 2026-07-17
 stack:
   - Astro
