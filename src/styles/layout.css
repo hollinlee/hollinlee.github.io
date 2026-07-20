@@ -51,6 +51,12 @@
   display: none;
 }
 
+main,
+.site-footer {
+  position: relative;
+  z-index: 1;
+}
+
 main {
   min-height: calc(100vh - 120px);
 }

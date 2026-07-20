@@ -14,6 +14,7 @@ body {
   color: var(--text-body);
   background: var(--page-bg);
   line-height: 1.75;
+  isolation: isolate;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
