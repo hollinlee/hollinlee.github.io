@@ -29,7 +29,7 @@ const serialized = JSON.stringify(backgrounds);
   };
 
   document.querySelectorAll<HTMLElement>('[data-background-rotator]').forEach((root) => {
-    const hero = document.querySelector<HTMLElement>('.anime-hero');
+    const hero = document.querySelector<HTMLElement>('[data-background-text-target]');
     const layers = Array.from(root.querySelectorAll<HTMLElement>('[data-background-layer]'));
     const config = JSON.parse(root.dataset.backgrounds ?? '{}') as BackgroundConfig;
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
