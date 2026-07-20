@@ -8,7 +8,6 @@ interface Props {
 }
 
 const { posts } = Astro.props;
-const defaultCover = '/content-assets/article-covers/default.webp';
 const emptyState = siteMetadata.emptyStates ?? {
   articlesTitle: '暂无公开文章',
   articlesDescription: '发布第一篇文章后，它会出现在这里。',
@@ -28,23 +27,22 @@ const emptyState = siteMetadata.emptyStates ?? {
     <div class="magazine-grid">
       {posts.map((post, index) => {
         const cover = post.data.cover;
-        const coverSrc = cover?.src ?? defaultCover;
-        const coverWidth = cover?.width ?? 1600;
-        const coverHeight = cover?.height ?? 900;
         return (
-          <article class:list={['magazine-card', { 'magazine-card-lead': index === 0 }]}>
+          <article class:list={['magazine-card', { 'magazine-card-lead': index === 0, 'magazine-card-no-cover': !cover }]}>
             <a href={`/blog/${contentSlug(post.id)}/`}>
-              <div class="magazine-media">
-                <img
-                  src={coverSrc}
-                  alt=""
-                  width={coverWidth}
-                  height={coverHeight}
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                  fetchpriority={index === 0 ? 'high' : 'auto'}
-                  decoding="async"
-                />
-              </div>
+              {cover && (
+                <div class="magazine-media">
+                  <img
+                    src={cover.src}
+                    alt=""
+                    width={cover.width}
+                    height={cover.height}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    fetchpriority={index === 0 ? 'high' : 'auto'}
+                    decoding="async"
+                  />
+                </div>
+              )}
               <div class="magazine-copy">
                 <div class="article-meta">
                   <time datetime={post.data.publishedAt.toISOString()}>{formatDate(post.data.publishedAt)}</time>

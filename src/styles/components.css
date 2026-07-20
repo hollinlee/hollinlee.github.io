@@ -785,6 +785,20 @@ body[data-page-context='reading'] .night-particle:nth-child(n + 8) {
   grid-template-rows: auto 1fr;
 }
 
+.magazine-card-no-cover > a {
+  grid-template-rows: 1fr;
+}
+
+.magazine-card-no-cover .magazine-copy {
+  min-height: 220px;
+  display: grid;
+  align-content: center;
+}
+
+.magazine-card-lead.magazine-card-no-cover .magazine-copy {
+  min-height: 260px;
+}
+
 .magazine-media {
   aspect-ratio: 16 / 9;
   overflow: hidden;

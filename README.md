@@ -120,7 +120,7 @@ emptyStates:
 
 ```yaml
 # data/backgrounds.yml
-rotationInterval: 45000
+rotationInterval: 20000
 transitionDuration: 2000
 blur: 5
 
@@ -150,11 +150,7 @@ tags: [Astro]
 ---
 ```
 
-没有独立封面的文章使用：
-
-```text
-published/assets/article-covers/default.webp
-```
+没有独立封面的文章使用纯文字卡片，不会复用背景图或全局默认封面。需要大图时，在文章目录中提供独立图片并通过 `cover` 显式引用。
 
 项目通过 `data/project-state.yml` 显式控制是否公开：
 
