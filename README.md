@@ -124,18 +124,16 @@ rotationInterval: 40000
 transitionDuration: 2200
 blur: 8
 
-day:
+items:
   - image: "/content-assets/backgrounds/day/day-01.webp"
     textPosition: "left"
     backgroundPosition: "60% 45%"
-
-night:
   - image: "/content-assets/backgrounds/night/night-01.webp"
     textPosition: "left"
     backgroundPosition: "65% 50%"
 ```
 
-`textPosition` 支持 `left`、`right`、`center`。`backgroundPosition` 使用标准 CSS background position。
+所有图片属于同一个自动轮换池，不再按日间或夜间模式分类。`textPosition` 支持 `left`、`right`、`center`；`backgroundPosition` 使用标准 CSS background position。旧版 `day` / `night` 配置仍可在迁移期间构建，但会输出弃用提示。
 
 ## 文章与项目
 

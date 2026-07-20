@@ -70,7 +70,7 @@ try {
 
   const profile = readYaml(dataSource, 'profile.yml');
   const site = readYaml(dataSource, 'site.yml');
-  const backgrounds = readYaml(dataSource, 'backgrounds.yml');
+  const backgrounds = normalizeBackgrounds(readYaml(dataSource, 'backgrounds.yml'));
   const projectState = readYaml(dataSource, 'project-state.yml');
 
   validateProfile(profile);
@@ -140,28 +140,56 @@ function validateSite(site) {
   }
 }
 
+function normalizeBackgrounds(backgrounds) {
+  const sharedKeys = ['rotationInterval', 'transitionDuration', 'blur'];
+  const hasItems = Object.hasOwn(backgrounds, 'items');
+  const hasLegacyPools = Object.hasOwn(backgrounds, 'day') || Object.hasOwn(backgrounds, 'night');
+
+  if (hasItems && hasLegacyPools) {
+    throw new Error('backgrounds must use either items or legacy day/night pools, not both.');
+  }
+
+  if (hasItems) {
+    assertAllowedKeys(backgrounds, [...sharedKeys, 'items'], 'backgrounds');
+    return backgrounds;
+  }
+
+  assertAllowedKeys(backgrounds, [...sharedKeys, 'day', 'night'], 'backgrounds');
+  for (const mode of ['day', 'night']) {
+    if (!Array.isArray(backgrounds[mode]) || backgrounds[mode].length === 0) {
+      throw new Error(`backgrounds.${mode} must be a non-empty array.`);
+    }
+  }
+
+  console.warn('[content] data/backgrounds.yml uses deprecated day/night pools; migrate to items.');
+  return {
+    rotationInterval: backgrounds.rotationInterval,
+    transitionDuration: backgrounds.transitionDuration,
+    blur: backgrounds.blur,
+    items: [...backgrounds.day, ...backgrounds.night],
+  };
+}
+
 function validateBackgrounds(backgrounds) {
-  assertAllowedKeys(backgrounds, ['rotationInterval', 'transitionDuration', 'blur', 'day', 'night'], 'backgrounds');
+  assertAllowedKeys(backgrounds, ['rotationInterval', 'transitionDuration', 'blur', 'items'], 'backgrounds');
   assertNumberInRange(backgrounds.rotationInterval, 'backgrounds.rotationInterval', 10000, 300000);
   assertNumberInRange(backgrounds.transitionDuration, 'backgrounds.transitionDuration', 0, 10000);
   assertNumberInRange(backgrounds.blur, 'backgrounds.blur', 0, 30);
 
-  for (const mode of ['day', 'night']) {
-    const entries = backgrounds[mode];
-    if (!Array.isArray(entries) || entries.length === 0) {
-      throw new Error(`backgrounds.${mode} must be a non-empty array.`);
-    }
-    entries.forEach((entry, index) => {
-      const path = `backgrounds.${mode}[${index}]`;
-      assertRecord(entry, path);
-      assertAllowedKeys(entry, ['image', 'textPosition', 'backgroundPosition'], path);
-      assertContentAssetPath(entry.image, `${path}.image`);
-      if (!['left', 'right', 'center'].includes(entry.textPosition)) {
-        throw new Error(`${path}.textPosition must be left, right or center.`);
-      }
-      assertString(entry.backgroundPosition, `${path}.backgroundPosition`);
-    });
+  if (!Array.isArray(backgrounds.items) || backgrounds.items.length === 0) {
+    throw new Error('backgrounds.items must be a non-empty array.');
   }
+
+  backgrounds.items.forEach((entry, index) => {
+    const path = `backgrounds.items[${index}]`;
+    assertRecord(entry, path);
+    assertAllowedKeys(entry, ['image', 'textPosition', 'backgroundPosition'], path);
+    assertContentAssetPath(entry.image, `${path}.image`);
+    if (!['left', 'right', 'center'].includes(entry.textPosition)) {
+      throw new Error(`${path}.textPosition must be left, right or center.`);
+    }
+    assertString(entry.backgroundPosition, `${path}.backgroundPosition`);
+  });
 }
 
 function validateProjectState(projectState) {
@@ -178,8 +206,7 @@ function validateProjectState(projectState) {
 function validatePublishedAssetReferences(profile, backgrounds, assetsSource) {
   const references = [
     profile.avatar,
-    ...backgrounds.day.map((entry) => entry.image),
-    ...backgrounds.night.map((entry) => entry.image),
+    ...backgrounds.items.map((entry) => entry.image),
   ];
 
   for (const publicPath of references) {
