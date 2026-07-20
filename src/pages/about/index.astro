@@ -1,6 +1,5 @@
 ---
 import { getCollection, render } from 'astro:content';
-import AboutProfile from '../../components/profile/AboutProfile.astro';
 import { site } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { contentSlug } from '../../lib/content';
@@ -17,11 +16,8 @@ const { Content } = await render(about);
       <h1>{about.data.title}</h1>
     </header>
 
-    <div class="about-layout">
-      <AboutProfile />
-      <article class="about-body prose-content">
-        <Content />
-      </article>
-    </div>
+    <article class="about-body prose-content">
+      <Content />
+    </article>
   </section>
 </BaseLayout>

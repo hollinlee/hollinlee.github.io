@@ -239,13 +239,6 @@ main {
   margin-bottom: 2rem;
 }
 
-.about-layout {
-  display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
-  gap: 2rem;
-  align-items: start;
-}
-
 .project-collection,
 .archive-timeline,
 .archive-months,
@@ -385,13 +378,11 @@ main {
     margin-top: -70px;
   }
 
-  .home-grid,
-  .about-layout {
+  .home-grid {
     grid-template-columns: 1fr;
   }
 
-  .profile-card,
-  .about-profile {
+  .profile-card {
     position: relative;
     top: auto;
     width: min(100%, 360px);
