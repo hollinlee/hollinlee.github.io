@@ -122,7 +122,7 @@ emptyStates:
 # data/backgrounds.yml
 rotationInterval: 45000
 transitionDuration: 2000
-blur: 8
+blur: 5
 
 items:
   - image: "/content-assets/backgrounds/day/day-01.webp"

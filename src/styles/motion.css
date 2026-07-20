@@ -22,8 +22,16 @@
 }
 
 @media (max-width: 760px) {
-  .sakura-petal:nth-child(n + 10),
-  .night-particle:nth-child(n + 7) {
+  :root,
+  :root[data-theme='day'],
+  :root[data-theme='night'] {
+    --surface-glass: color-mix(in srgb, var(--surface-raised) 92%, transparent);
+    --surface-card: color-mix(in srgb, var(--surface-raised) 94%, transparent);
+    --surface-reading: color-mix(in srgb, var(--surface-raised) 98%, transparent);
+  }
+
+  .sakura-petal:nth-child(n + 8),
+  .night-particle:nth-child(n + 5) {
     display: none;
   }
 
@@ -32,7 +40,17 @@
   }
 
   .hero-background-layer {
-    filter: blur(min(var(--hero-blur), 7px));
+    filter: blur(min(var(--hero-blur), 4px));
+  }
+
+  .nav,
+  .profile-card,
+  .magazine-card,
+  .project-summary,
+  .featured-project-card,
+  .project-compact-item {
+    box-shadow: 0 8px 22px rgba(20, 16, 40, 0.12);
+    backdrop-filter: blur(6px) saturate(105%);
   }
 }
 
@@ -66,8 +84,12 @@
 }
 
 @media (prefers-reduced-transparency: reduce) {
-  :root {
+  :root,
+  :root[data-theme='day'],
+  :root[data-theme='night'] {
     --surface-glass: var(--surface-raised);
+    --surface-card: var(--surface-raised);
+    --surface-reading: var(--surface-raised);
   }
 
   .nav,
@@ -75,8 +97,21 @@
   .content-card,
   .profile-card,
   .button,
-  .style-surface-glass {
+  .style-surface-glass,
+  .article-card,
+  .magazine-card,
+  .project-summary,
+  .featured-project-card,
+  .project-compact-item,
+  .site-footer {
     background: var(--surface-raised);
     backdrop-filter: none;
+  }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  :root {
+    --surface-glass: var(--surface-raised);
+    --surface-card: var(--surface-raised);
   }
 }

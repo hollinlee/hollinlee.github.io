@@ -294,9 +294,9 @@ main {
 }
 
 .prose {
-  width: min(calc(100% - 2rem), 790px);
+  width: min(calc(100% - 1rem), 860px);
   margin: 0 auto;
-  padding: 8rem 0 4.5rem;
+  padding: 8rem clamp(1.25rem, 5vw, 3rem) 4.5rem;
 }
 
 .grid {

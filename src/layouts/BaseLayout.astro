@@ -15,6 +15,12 @@ interface Props {
 
 const { title = site.title, description = site.description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url);
+const path = Astro.url.pathname;
+const pageContext = path === '/'
+  ? 'home'
+  : path === '/about/' || /^\/(blog|notes|projects)\/[^/]+\/$/.test(path)
+    ? 'reading'
+    : 'index';
 ---
 
 <!doctype html>
@@ -36,7 +42,7 @@ const canonical = new URL(Astro.url.pathname, site.url);
     <meta name="twitter:card" content="summary_large_image" />
     <title>{title}</title>
   </head>
-  <body>
+  <body data-page-context={pageContext}>
     <div class="site-environment" aria-hidden="true">
       <BackgroundRotator />
       <SakuraLayer />
