@@ -1,5 +1,8 @@
 ---
 import '../styles/global.css';
+import NightParticles from '../components/effects/NightParticles.astro';
+import SakuraLayer from '../components/effects/SakuraLayer.astro';
+import BackgroundRotator from '../components/hero/BackgroundRotator.astro';
 import ThemeScript from '../components/theme/ThemeScript.astro';
 import SiteNavigation from '../components/navigation/SiteNavigation.astro';
 import { site } from '../config/site';
@@ -32,6 +35,11 @@ const canonical = new URL(Astro.url.pathname, site.url);
     <title>{title}</title>
   </head>
   <body>
+    <div class="site-environment" aria-hidden="true">
+      <BackgroundRotator />
+      <SakuraLayer />
+      <NightParticles />
+    </div>
     <SiteNavigation pathname={Astro.url.pathname} />
     <main><slot /></main>
     <footer class="site-footer">

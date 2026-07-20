@@ -2,9 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ArticleMagazine from '../components/articles/ArticleMagazine.astro';
-import BackgroundRotator from '../components/hero/BackgroundRotator.astro';
-import NightParticles from '../components/effects/NightParticles.astro';
-import SakuraLayer from '../components/effects/SakuraLayer.astro';
 import ProfileCard from '../components/profile/ProfileCard.astro';
 import ProjectSummary from '../components/projects/ProjectSummary.astro';
 import { site } from '../config/site';
@@ -19,10 +16,7 @@ const notes = await getCollection('notes');
 ---
 
 <BaseLayout>
-  <section class="anime-hero" data-text-position="left">
-    <BackgroundRotator />
-    <SakuraLayer />
-    <NightParticles />
+  <section class="anime-hero" data-background-text-target data-text-position="left">
     <div class="container hero-inner">
       <div class="hero-copy">
         <h1>{site.title}</h1>

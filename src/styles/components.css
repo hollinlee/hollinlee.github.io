@@ -109,7 +109,15 @@
   box-shadow: var(--shadow-raised);
 }
 
-.anime-hero {
+.site-environment {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  height: 100svh;
+  overflow: hidden;
+  pointer-events: none;
   background:
     radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.95) 0 4%, transparent 18%),
     radial-gradient(circle at 78% 18%, var(--aurora-a), transparent 25%),
