@@ -11,6 +11,7 @@
     "dev": "npm run content:sync && astro dev",
     "build": "npm run content:sync && astro build",
     "check": "npm run content:sync && astro check",
+    "test": "node --test src/lib/*.test.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },

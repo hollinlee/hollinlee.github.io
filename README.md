@@ -120,8 +120,8 @@ emptyStates:
 
 ```yaml
 # data/backgrounds.yml
-rotationInterval: 40000
-transitionDuration: 2200
+rotationInterval: 45000
+transitionDuration: 2000
 blur: 8
 
 items:

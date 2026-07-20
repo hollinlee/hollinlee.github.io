@@ -1,0 +1,44 @@
+---
+import { backgrounds } from '../../config/content';
+import {
+  BACKGROUND_STATE_VERSION,
+  BACKGROUND_STORAGE_KEY,
+  backgroundSignature,
+} from '../../lib/background-rotation.mjs';
+
+const entries = backgrounds.items;
+const signature = backgroundSignature(entries);
+---
+
+<script
+  is:inline
+  define:vars={{
+    entries,
+    signature,
+    storageKey: BACKGROUND_STORAGE_KEY,
+    stateVersion: BACKGROUND_STATE_VERSION,
+  }}
+>
+  (() => {
+    let current = 0;
+    try {
+      const state = JSON.parse(sessionStorage.getItem(storageKey) || 'null');
+      if (
+        state?.version === stateVersion
+        && state.signature === signature
+        && Number.isInteger(state.current)
+        && state.current >= 0
+        && state.current < entries.length
+      ) current = state.current;
+    } catch {
+      // The runtime will rebuild invalid or inaccessible session state.
+    }
+
+    const entry = entries[current] || entries[0];
+    if (!entry) return;
+    const image = `url(${JSON.stringify(entry.image)})`;
+    document.documentElement.style.setProperty('--initial-background-image', image);
+    document.documentElement.style.setProperty('--initial-background-position', entry.backgroundPosition);
+    document.documentElement.dataset.backgroundTextPosition = entry.textPosition;
+  })();
+</script>

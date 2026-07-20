@@ -167,13 +167,13 @@
     linear-gradient(90deg, rgba(12, 10, 38, 0.8), rgba(27, 18, 61, 0.24) 68%, transparent);
 }
 
-.anime-hero[data-text-position='right'] .hero-background-overlay {
+:root[data-background-text-position='right'] .hero-background-overlay {
   background:
     linear-gradient(180deg, rgba(24, 20, 48, 0.08), rgba(24, 20, 48, 0.18)),
     linear-gradient(270deg, rgba(252, 246, 255, 0.78), rgba(247, 239, 255, 0.14) 68%, transparent);
 }
 
-:root[data-theme='night'] .anime-hero[data-text-position='right'] .hero-background-overlay {
+:root[data-theme='night'][data-background-text-position='right'] .hero-background-overlay {
   background:
     linear-gradient(180deg, rgba(7, 7, 28, 0.28), rgba(7, 7, 28, 0.5)),
     linear-gradient(270deg, rgba(12, 10, 38, 0.82), rgba(27, 18, 61, 0.24) 68%, transparent);
@@ -183,29 +183,29 @@
   transition: margin var(--hero-transition, 300ms) ease, text-align var(--hero-transition, 300ms) ease;
 }
 
-.anime-hero[data-text-position='right'] .hero-copy {
+:root[data-background-text-position='right'] .hero-copy {
   margin-left: auto;
   text-align: right;
 }
 
-.anime-hero[data-text-position='right'] .hero-copy p {
+:root[data-background-text-position='right'] .hero-copy p {
   margin-left: auto;
 }
 
-.anime-hero[data-text-position='right'] .hero-actions {
+:root[data-background-text-position='right'] .hero-actions {
   justify-content: flex-end;
 }
 
-.anime-hero[data-text-position='center'] .hero-copy {
+:root[data-background-text-position='center'] .hero-copy {
   margin-inline: auto;
   text-align: center;
 }
 
-.anime-hero[data-text-position='center'] .hero-copy p {
+:root[data-background-text-position='center'] .hero-copy p {
   margin-inline: auto;
 }
 
-.anime-hero[data-text-position='center'] .hero-actions {
+:root[data-background-text-position='center'] .hero-actions {
   justify-content: center;
 }
 
