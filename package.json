@@ -12,6 +12,7 @@
     "build": "npm run content:sync && astro build",
     "check": "npm run content:sync && astro check",
     "test": "node --test src/lib/*.test.mjs",
+    "test:e2e": "playwright test",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.61.1",
     "@types/node": "^24.13.3",
     "typescript": "^6.0.3"
   }
