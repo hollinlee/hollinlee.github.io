@@ -1,8 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
+import ArticleHeader from '../../components/articles/ArticleHeader.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { site } from '../../config/site';
-import { contentSlug, formatDate } from '../../lib/content';
+import { contentId, contentSlug, estimateReadingMinutes } from '../../lib/content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -15,10 +16,17 @@ const { Content } = await render(post);
 
 <BaseLayout title={`${post.data.title} — ${site.name}`} description={post.data.description}>
   <article class="prose">
-    <div class="eyebrow">文章</div>
-    <h1>{post.data.title}</h1>
-    <p class="lede">{post.data.description}</p>
-    <p class="meta">发布于 {formatDate(post.data.publishedAt)}</p>
+    <ArticleHeader
+      kind="文章"
+      title={post.data.title}
+      description={post.data.description}
+      publishedAt={post.data.publishedAt}
+      updatedAt={post.data.updatedAt}
+      readingMinutes={estimateReadingMinutes(post.body ?? '')}
+      tags={post.data.tags}
+      contentId={contentId('post', post.id)}
+    />
     <Content />
+    <div data-comments-slot aria-label="评论"></div>
   </article>
 </BaseLayout>

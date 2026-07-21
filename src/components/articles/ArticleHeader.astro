@@ -1,0 +1,60 @@
+---
+interface Props {
+  kind: string;
+  title: string;
+  description: string;
+  publishedAt: Date;
+  updatedAt?: Date;
+  readingMinutes: number;
+  tags: string[];
+  contentId: string;
+}
+
+const {
+  kind,
+  title,
+  description,
+  publishedAt,
+  updatedAt,
+  readingMinutes,
+  tags,
+  contentId,
+} = Astro.props;
+---
+
+<a class="article-return" data-article-return href="/archive/">← 返回归档</a>
+<div class="article-kind">{kind}</div>
+<h1>{title}</h1>
+<p class="lede">{description}</p>
+<div class="article-meta" aria-label="文章信息">
+  <span class="article-meta-item">
+    发布于 <time datetime={publishedAt.toISOString()}>{publishedAt.toLocaleDateString('zh-CN')}</time>
+  </span>
+  {updatedAt && updatedAt.valueOf() !== publishedAt.valueOf() && (
+    <span class="article-meta-item">
+      更新于 <time datetime={updatedAt.toISOString()}>{updatedAt.toLocaleDateString('zh-CN')}</time>
+    </span>
+  )}
+  <span class="article-meta-item">约 {readingMinutes} 分钟读完</span>
+  <span class="article-meta-item" data-page-view-slot data-content-id={contentId} hidden aria-live="polite"></span>
+</div>
+{tags.length > 0 && (
+  <nav class="article-tags" aria-label="文章 Tags">
+    {tags.map((tag) => <a href={`/archive/?tag=${encodeURIComponent(tag)}`}>#{tag}</a>)}
+  </nav>
+)}
+
+<script>
+  const returnLink = document.querySelector<HTMLAnchorElement>('[data-article-return]');
+  if (returnLink && document.referrer) {
+    try {
+      const referrer = new URL(document.referrer);
+      if (referrer.origin === location.origin && referrer.pathname === '/') {
+        returnLink.href = '/';
+        returnLink.textContent = '← 返回首页';
+      }
+    } catch {
+      // Keep the archive fallback when the referrer is not a valid URL.
+    }
+  }
+</script>

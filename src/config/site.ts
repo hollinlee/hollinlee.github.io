@@ -14,6 +14,7 @@ export const site = {
   url: import.meta.env.SITE || 'https://example.com',
   language: siteMetadata.language,
   locale: siteMetadata.language.replace('-', '_'),
+  siteLaunchedAt: siteMetadata.siteLaunchedAt ?? '2026-07-17',
   email: emailUrl.startsWith('mailto:') ? emailUrl.slice('mailto:'.length) : '',
   github,
   hero: {
