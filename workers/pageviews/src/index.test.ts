@@ -17,6 +17,12 @@ class FakeStatement {
 
   async first<T>() {
     const id = String(this.values[0]);
+    if (this.query.includes('SUM(views)')) {
+      const views = [...this.database.rows.entries()]
+        .filter(([contentId]) => contentId.startsWith('article/') || contentId.startsWith('project/'))
+        .reduce((total, [, count]) => total + count, 0);
+      return { views } as T;
+    }
     if (this.query.includes('SELECT views')) {
       const views = this.database.rows.get(id);
       return (views === undefined ? null : { views }) as T | null;
@@ -55,11 +61,30 @@ function request(method: string, id = contentId, requestOrigin = origin) {
   });
 }
 
+function totalRequest(method = 'GET') {
+  return new Request('https://views.example.com/views', {
+    method,
+    headers: { Origin: origin },
+  });
+}
+
 describe('page-view worker', () => {
   it('returns zero for an unknown content ID', async () => {
     const response = await worker.fetch(request('GET'), env());
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({ contentId, views: 0 });
+  });
+
+  it('returns the total for current article and project IDs', async () => {
+    const bindings = env();
+    const database = bindings.DB as unknown as FakeDatabase;
+    database.rows.set(contentId, 3);
+    database.rows.set('project/project_1784610631', 2);
+    database.rows.set('note/note_1784610630', 99);
+    const response = await worker.fetch(totalRequest(), bindings);
+    expect(response.status).toBe(200);
+    expect(response.headers.get('Access-Control-Allow-Origin')).toBe(origin);
+    await expect(response.json()).resolves.toEqual({ views: 5 });
   });
 
   it('increments a content ID atomically', async () => {

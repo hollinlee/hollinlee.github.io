@@ -23,6 +23,7 @@ test('homepage counts all articles, includes text-only cards and keeps the title
     await page.setViewportSize(viewport);
     await page.goto('/');
     await expect(page.locator('.profile-stat').first()).toContainText('3文章');
+    await expect(page.locator('.profile-stat').nth(2)).toContainText('—访问');
     await expect(page.locator('.magazine-card')).toHaveCount(3);
     await expect(page.locator('.magazine-card-no-cover')).toHaveCount(2);
     const titleMetrics = await page.locator('.hero-copy h1').evaluate((element) => ({

@@ -9,3 +9,7 @@ export function shouldIncrementView(previousTimestamp, now = Date.now()) {
 export function pageViewUrl(endpoint, contentId) {
   return `${endpoint.replace(/\/$/, '')}/views/${encodeURIComponent(contentId)}`;
 }
+
+export function totalViewsUrl(endpoint) {
+  return `${endpoint.replace(/\/$/, '')}/views`;
+}

@@ -1,14 +1,14 @@
 ---
-import { profile } from '../../config/content';
+import { profile, siteMetadata } from '../../config/content';
 import ContactLinks from './ContactLinks.astro';
 
 interface Props {
   articleCount: number;
   projectCount: number;
-  categoryCount: number;
 }
 
-const { articleCount, projectCount, categoryCount } = Astro.props;
+const { articleCount, projectCount } = Astro.props;
+const pageViewEndpoint = siteMetadata.pageViews?.enabled ? siteMetadata.pageViews.endpoint : undefined;
 ---
 
 <aside class="profile-card" aria-labelledby="profile-name">
@@ -31,8 +31,33 @@ const { articleCount, projectCount, categoryCount } = Astro.props;
   <div class="profile-stats" aria-label="内容统计">
     <div class="profile-stat"><strong>{articleCount}</strong><span>文章</span></div>
     <div class="profile-stat"><strong>{projectCount}</strong><span>项目</span></div>
-    <div class="profile-stat"><strong>{categoryCount}</strong><span>分类</span></div>
+    <div class="profile-stat">
+      <strong data-total-views data-endpoint={pageViewEndpoint} aria-live="polite">—</strong>
+      <span>访问</span>
+    </div>
   </div>
 
   <ContactLinks class="profile-links" />
 </aside>
+
+<script>
+  import { totalViewsUrl } from '../../lib/pageviews.mjs';
+
+  const totalViews = document.querySelector<HTMLElement>('[data-total-views]');
+  const endpoint = totalViews?.dataset.endpoint;
+  if (totalViews && endpoint) {
+    fetch(totalViewsUrl(endpoint))
+      .then((response) => {
+        if (!response.ok) throw new Error(`Page-view API returned ${response.status}.`);
+        return response.json() as Promise<{ views?: number }>;
+      })
+      .then(({ views }) => {
+        if (typeof views === 'number' && Number.isSafeInteger(views) && views >= 0) {
+          totalViews.textContent = views.toLocaleString('zh-CN');
+        }
+      })
+      .catch(() => {
+        // Keep the unavailable placeholder when the optional service fails.
+      });
+  }
+</script>
