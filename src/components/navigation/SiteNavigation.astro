@@ -10,7 +10,7 @@ const { pathname } = Astro.props;
 const links = [
   { href: '/', label: '首页', match: (path: string) => path === '/' },
   { href: '/projects/', label: '项目', match: (path: string) => path.startsWith('/projects') },
-  { href: '/archive/', label: '归档', match: (path: string) => path.startsWith('/blog') || path.startsWith('/notes') || path.startsWith('/archive') },
+  { href: '/archive/', label: '归档', match: (path: string) => path.startsWith('/articles') || path.startsWith('/archive') },
   { href: '/about/', label: '关于', match: (path: string) => path.startsWith('/about') },
 ];
 ---

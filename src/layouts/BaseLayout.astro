@@ -19,7 +19,7 @@ const canonical = new URL(Astro.url.pathname, site.url);
 const path = Astro.url.pathname;
 const pageContext = path === '/'
   ? 'home'
-  : path === '/about/' || /^\/(blog|notes|projects)\/[^/]+\/$/.test(path)
+  : path === '/about/' || /^\/(articles|projects)\/[^/]+\/$/.test(path)
     ? 'reading'
     : 'index';
 ---

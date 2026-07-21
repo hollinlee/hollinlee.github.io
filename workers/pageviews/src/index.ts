@@ -10,7 +10,7 @@ interface Env {
 
 type ViewRow = { views: number };
 
-const CONTENT_ID_PATTERN = /^(post|note|project)\/(post|note|project)_\d{10,}$/;
+const CONTENT_ID_PATTERN = /^(article|project)\/(article|project)_\d{10,}$/;
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {

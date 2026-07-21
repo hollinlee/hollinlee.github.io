@@ -6,33 +6,26 @@ import { contentSlug } from '../../lib/content';
 
 type ArchiveItem = {
   id: string;
-  type: '文章' | '笔记';
   title: string;
   description: string;
+  category: string;
   publishedAt: Date;
   tags: string[];
   href: string;
 };
 
-const posts: ArchiveItem[] = (await getCollection('posts')).map((post) => ({
-  id: `post-${post.id}`,
-  type: '文章',
-  title: post.data.title,
-  description: post.data.description,
-  publishedAt: post.data.publishedAt,
-  tags: post.data.tags,
-  href: `/blog/${contentSlug(post.id)}/`,
-}));
-const notes: ArchiveItem[] = (await getCollection('notes')).map((note) => ({
-  id: `note-${note.id}`,
-  type: '笔记',
-  title: note.data.title,
-  description: note.data.description,
-  publishedAt: note.data.publishedAt,
-  tags: note.data.tags,
-  href: `/notes/${contentSlug(note.id)}/`,
-}));
-const items = [...posts, ...notes].sort((a, b) => b.publishedAt.valueOf() - a.publishedAt.valueOf());
+const items: ArchiveItem[] = (await getCollection('articles'))
+  .map((article) => ({
+    id: article.id,
+    title: article.data.title,
+    description: article.data.description,
+    category: article.data.category,
+    publishedAt: article.data.publishedAt,
+    tags: article.data.tags,
+    href: `/articles/${contentSlug(article.id)}/`,
+  }))
+  .sort((a, b) => b.publishedAt.valueOf() - a.publishedAt.valueOf());
+const categories = [...new Set(items.map((item) => item.category))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
 const tags = [...new Set(items.flatMap((item) => item.tags))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
 const years = new Map<number, Map<number, ArchiveItem[]>>();
 
@@ -48,21 +41,40 @@ for (const item of items) {
 const dayFormatter = new Intl.DateTimeFormat('zh-CN', { day: '2-digit' });
 ---
 
-<BaseLayout title={`归档 — ${site.name}`} description="按 Tag 和时间浏览公开文章与笔记。">
+<BaseLayout title={`归档 — ${site.name}`} description="按关键词、分类和 Tag 检索公开文章。">
   <section class="archive-page container">
     <header class="archive-intro">
       <span class="eyebrow">ARCHIVE</span>
-      <h1>归档</h1>
-      <p>按 Tag 筛选，下方按时间倒序排列文章和笔记。</p>
+      <h1>文章归档</h1>
+      <p>按关键词、分类或 Tag 查找文章，下方按发布时间倒序排列。</p>
     </header>
 
-    <div class="tag-filter" role="group" aria-label="按 Tag 筛选归档">
-      <button type="button" class="tag-filter-button is-active" data-tag-value="" aria-pressed="true">全部</button>
-      {tags.map((tag) => (
-        <button type="button" class="tag-filter-button" data-tag-value={tag} aria-pressed="false">#{tag}</button>
-      ))}
+    <div class="archive-search">
+      <label for="archive-query">检索文章</label>
+      <input id="archive-query" type="search" placeholder="搜索标题、摘要、分类或 Tag" autocomplete="off" data-archive-query />
     </div>
-    <p class="archive-status" data-archive-status aria-live="polite">共 {items.length} 条内容</p>
+
+    <div class="archive-filter-group">
+      <span class="archive-filter-label">分类</span>
+      <div class="category-filter" role="group" aria-label="按分类筛选归档">
+        <button type="button" class="tag-filter-button is-active" data-category-value="" aria-pressed="true">全部</button>
+        {categories.map((category) => (
+          <button type="button" class="tag-filter-button" data-category-value={category} aria-pressed="false">{category}</button>
+        ))}
+      </div>
+    </div>
+
+    <div class="archive-filter-group">
+      <span class="archive-filter-label">Tag</span>
+      <div class="tag-filter" role="group" aria-label="按 Tag 筛选归档">
+        <button type="button" class="tag-filter-button is-active" data-tag-value="" aria-pressed="true">全部</button>
+        {tags.map((tag) => (
+          <button type="button" class="tag-filter-button" data-tag-value={tag} aria-pressed="false">#{tag}</button>
+        ))}
+      </div>
+    </div>
+    <p class="archive-status" data-archive-status aria-live="polite">共 {items.length} 篇文章</p>
+    {items.length > 0 && <p class="archive-no-results" data-archive-no-results hidden>没有匹配的文章，尝试清除部分筛选条件。</p>}
 
     {items.length > 0 ? (
       <div class="archive-timeline" data-archive-timeline>
@@ -75,11 +87,17 @@ const dayFormatter = new Intl.DateTimeFormat('zh-CN', { day: '2-digit' });
                   <h3>{month} 月</h3>
                   <div class="archive-items">
                     {monthItems.map((item) => (
-                      <article class="archive-item" data-archive-item data-tags={JSON.stringify(item.tags)}>
+                      <article
+                        class="archive-item"
+                        data-archive-item
+                        data-category={item.category}
+                        data-tags={JSON.stringify(item.tags)}
+                        data-search={[item.title, item.description, item.category, ...item.tags].join(' ').toLocaleLowerCase('zh-CN')}
+                      >
                         <time datetime={item.publishedAt.toISOString()}>{dayFormatter.format(item.publishedAt)} 日</time>
                         <a href={item.href}>
                           <div class="archive-item-heading">
-                            <span class="archive-type">{item.type}</span>
+                            <span class="archive-type">{item.category}</span>
                             <h4>{item.title}</h4>
                           </div>
                           <p>{item.description}</p>
@@ -101,70 +119,106 @@ const dayFormatter = new Intl.DateTimeFormat('zh-CN', { day: '2-digit' });
     ) : (
       <div class="magazine-empty">
         <span class="handwritten magazine-empty-label">Empty archive</span>
-        <h3>暂无公开内容</h3>
-        <p>发布文章或笔记后，它们会按时间出现在这里。</p>
+        <h3>暂无公开文章</h3>
+        <p>发布第一篇文章后，它会按时间出现在这里。</p>
       </div>
     )}
   </section>
 </BaseLayout>
 
 <script>
-  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-tag-value]'));
+  const categoryButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-category-value]'));
+  const tagButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-tag-value]'));
+  const queryInput = document.querySelector<HTMLInputElement>('[data-archive-query]');
   const items = Array.from(document.querySelectorAll<HTMLElement>('[data-archive-item]'));
   const groups = Array.from(document.querySelectorAll<HTMLElement>('[data-archive-group]'));
   const years = Array.from(document.querySelectorAll<HTMLElement>('[data-archive-year]'));
   const status = document.querySelector<HTMLElement>('[data-archive-status]');
-  const validTags = new Set(buttons.map((button) => button.dataset.tagValue ?? '').filter(Boolean));
+  const noResults = document.querySelector<HTMLElement>('[data-archive-no-results]');
+  const validCategories = new Set(categoryButtons.map((button) => button.dataset.categoryValue ?? '').filter(Boolean));
+  const validTags = new Set(tagButtons.map((button) => button.dataset.tagValue ?? '').filter(Boolean));
 
-  function selectedFromUrl() {
-    const requested = new URL(location.href).searchParams.get('tag') ?? '';
-    return validTags.has(requested) ? requested : '';
+  function stateFromUrl() {
+    const params = new URL(location.href).searchParams;
+    const requestedCategory = params.get('category') ?? '';
+    const requestedTag = params.get('tag') ?? '';
+    return {
+      category: validCategories.has(requestedCategory) ? requestedCategory : '',
+      tag: validTags.has(requestedTag) ? requestedTag : '',
+      query: (params.get('q') ?? '').trim(),
+    };
   }
 
-  function updateUrl(tag: string, replace = false) {
+  function updateUrl(category: string, tag: string, query: string, replace = false) {
     const url = new URL(location.href);
-    if (tag) url.searchParams.set('tag', tag);
-    else url.searchParams.delete('tag');
+    for (const [key, value] of [['category', category], ['tag', tag], ['q', query]]) {
+      if (value) url.searchParams.set(key, value);
+      else url.searchParams.delete(key);
+    }
     history[replace ? 'replaceState' : 'pushState']({}, '', url);
   }
 
-  function applyFilter(tag: string) {
+  function applyFilters(category: string, tag: string, query: string) {
+    const normalizedQuery = query.toLocaleLowerCase('zh-CN');
     let visibleCount = 0;
     for (const item of items) {
       const itemTags = JSON.parse(item.dataset.tags ?? '[]') as string[];
-      const visible = !tag || itemTags.includes(tag);
+      const visible = (!category || item.dataset.category === category)
+        && (!tag || itemTags.includes(tag))
+        && (!normalizedQuery || (item.dataset.search ?? '').includes(normalizedQuery));
       item.hidden = !visible;
       if (visible) visibleCount += 1;
     }
 
-    for (const group of groups) {
-      group.hidden = !group.querySelector('[data-archive-item]:not([hidden])');
+    for (const group of groups) group.hidden = !group.querySelector('[data-archive-item]:not([hidden])');
+    for (const year of years) year.hidden = !year.querySelector('[data-archive-group]:not([hidden])');
+    for (const button of categoryButtons) {
+      const active = (button.dataset.categoryValue ?? '') === category;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
     }
-    for (const year of years) {
-      year.hidden = !year.querySelector('[data-archive-group]:not([hidden])');
-    }
-    for (const button of buttons) {
+    for (const button of tagButtons) {
       const active = (button.dataset.tagValue ?? '') === tag;
       button.classList.toggle('is-active', active);
       button.setAttribute('aria-pressed', String(active));
     }
-    if (status) status.textContent = tag ? `#${tag}：${visibleCount} 条内容` : `共 ${visibleCount} 条内容`;
+    if (queryInput && queryInput.value !== query) queryInput.value = query;
+    if (status) status.textContent = `找到 ${visibleCount} 篇文章`;
+    if (noResults) noResults.hidden = visibleCount !== 0;
   }
 
-  for (const button of buttons) {
+  function applyAndStore(next: { category: string; tag: string; query: string }, replace = false) {
+    applyFilters(next.category, next.tag, next.query);
+    updateUrl(next.category, next.tag, next.query, replace);
+  }
+
+  for (const button of categoryButtons) {
     button.addEventListener('click', () => {
-      const value = button.dataset.tagValue ?? '';
-      const current = buttons.find((candidate) => candidate.getAttribute('aria-pressed') === 'true')?.dataset.tagValue ?? '';
-      const next = value && value === current ? '' : value;
-      applyFilter(next);
-      updateUrl(next);
+      const state = stateFromUrl();
+      const value = button.dataset.categoryValue ?? '';
+      state.category = value && value === state.category ? '' : value;
+      applyAndStore(state);
     });
   }
+  for (const button of tagButtons) {
+    button.addEventListener('click', () => {
+      const state = stateFromUrl();
+      const value = button.dataset.tagValue ?? '';
+      state.tag = value && value === state.tag ? '' : value;
+      applyAndStore(state);
+    });
+  }
+  queryInput?.addEventListener('input', () => {
+    const state = stateFromUrl();
+    state.query = queryInput.value.trim();
+    applyAndStore(state, true);
+  });
+  addEventListener('popstate', () => {
+    const state = stateFromUrl();
+    applyFilters(state.category, state.tag, state.query);
+  });
 
-  addEventListener('popstate', () => applyFilter(selectedFromUrl()));
-
-  const initial = selectedFromUrl();
-  applyFilter(initial);
-  const requested = new URL(location.href).searchParams.get('tag') ?? '';
-  if (requested && requested !== initial) updateUrl('', true);
+  const initial = stateFromUrl();
+  applyFilters(initial.category, initial.tag, initial.query);
+  updateUrl(initial.category, initial.tag, initial.query, true);
 </script>

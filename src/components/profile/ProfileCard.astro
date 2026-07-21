@@ -5,10 +5,10 @@ import ContactLinks from './ContactLinks.astro';
 interface Props {
   articleCount: number;
   projectCount: number;
-  noteCount: number;
+  categoryCount: number;
 }
 
-const { articleCount, projectCount, noteCount } = Astro.props;
+const { articleCount, projectCount, categoryCount } = Astro.props;
 ---
 
 <aside class="profile-card" aria-labelledby="profile-name">
@@ -31,7 +31,7 @@ const { articleCount, projectCount, noteCount } = Astro.props;
   <div class="profile-stats" aria-label="内容统计">
     <div class="profile-stat"><strong>{articleCount}</strong><span>文章</span></div>
     <div class="profile-stat"><strong>{projectCount}</strong><span>项目</span></div>
-    <div class="profile-stat"><strong>{noteCount}</strong><span>笔记</span></div>
+    <div class="profile-stat"><strong>{categoryCount}</strong><span>分类</span></div>
   </div>
 
   <ContactLinks class="profile-links" />

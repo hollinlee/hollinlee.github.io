@@ -19,7 +19,7 @@ test('increments when no valid timestamp exists', () => {
 
 test('encodes collection-scoped content IDs', () => {
   assert.equal(
-    pageViewUrl('https://views.example.com/', 'note/note_1784610630'),
-    'https://views.example.com/views/note%2Fnote_1784610630',
+    pageViewUrl('https://views.example.com/', 'article/article_1784610630'),
+    'https://views.example.com/views/article%2Farticle_1784610630',
   );
 });

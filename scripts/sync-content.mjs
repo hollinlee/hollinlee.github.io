@@ -19,7 +19,7 @@ const astroDataStore = resolve(root, 'node_modules/.astro');
 const buildOutput = resolve(root, 'dist');
 const tempSource = resolve(root, '.content-source');
 const exampleSource = resolve(root, 'examples/content');
-const collections = ['posts', 'notes', 'projects', 'logs', 'pages'];
+const collections = ['articles', 'projects', 'pages'];
 
 loadLocalEnv();
 
@@ -70,7 +70,7 @@ try {
 
   const profile = readYaml(dataSource, 'profile.yml');
   const site = readYaml(dataSource, 'site.yml');
-  const backgrounds = normalizeBackgrounds(readYaml(dataSource, 'backgrounds.yml'));
+  const backgrounds = readYaml(dataSource, 'backgrounds.yml');
   const projectState = readYaml(dataSource, 'project-state.yml');
 
   validateProfile(profile);
@@ -162,36 +162,6 @@ function validateSite(site) {
     assertString(site.emptyStates.articlesTitle, 'site.emptyStates.articlesTitle');
     assertString(site.emptyStates.articlesDescription, 'site.emptyStates.articlesDescription');
   }
-}
-
-function normalizeBackgrounds(backgrounds) {
-  const sharedKeys = ['rotationInterval', 'transitionDuration', 'blur'];
-  const hasItems = Object.hasOwn(backgrounds, 'items');
-  const hasLegacyPools = Object.hasOwn(backgrounds, 'day') || Object.hasOwn(backgrounds, 'night');
-
-  if (hasItems && hasLegacyPools) {
-    throw new Error('backgrounds must use either items or legacy day/night pools, not both.');
-  }
-
-  if (hasItems) {
-    assertAllowedKeys(backgrounds, [...sharedKeys, 'items'], 'backgrounds');
-    return backgrounds;
-  }
-
-  assertAllowedKeys(backgrounds, [...sharedKeys, 'day', 'night'], 'backgrounds');
-  for (const mode of ['day', 'night']) {
-    if (!Array.isArray(backgrounds[mode]) || backgrounds[mode].length === 0) {
-      throw new Error(`backgrounds.${mode} must be a non-empty array.`);
-    }
-  }
-
-  console.warn('[content] data/backgrounds.yml uses deprecated day/night pools; migrate to items.');
-  return {
-    rotationInterval: backgrounds.rotationInterval,
-    transitionDuration: backgrounds.transitionDuration,
-    blur: backgrounds.blur,
-    items: [...backgrounds.day, ...backgrounds.night],
-  };
 }
 
 function validateBackgrounds(backgrounds) {

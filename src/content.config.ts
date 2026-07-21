@@ -11,18 +11,13 @@ const commonArticle = {
   comments: z.boolean().default(true),
 };
 
-const posts = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
-  schema: ({ image }) => z.object({
+const articles = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/articles' }),
+  schema: z.object({
     ...commonArticle,
-    cover: image().optional(),
-    featured: z.boolean().default(false),
+    category: z.string().min(1),
+    cover: z.string().regex(/^\/content-assets\/article-covers\/[^/]+\.webp$/).optional(),
   }),
-});
-
-const notes = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/notes' }),
-  schema: z.object(commonArticle),
 });
 
 const projects = defineCollection({
@@ -41,16 +36,6 @@ const projects = defineCollection({
   }),
 });
 
-const logs = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/logs' }),
-  schema: z.object({
-    title: z.string(),
-    week: z.string(),
-    publishedAt: z.coerce.date(),
-    tags: z.array(z.string()).default([]),
-  }),
-});
-
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/pages' }),
   schema: z.object({
@@ -59,4 +44,4 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { posts, notes, projects, logs, pages };
+export const collections = { articles, projects, pages };

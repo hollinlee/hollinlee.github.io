@@ -7,12 +7,10 @@ import ProjectSummary from '../components/projects/ProjectSummary.astro';
 import { site } from '../config/site';
 
 const allProjects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const allPosts = (await getCollection('posts'))
+const allArticles = (await getCollection('articles'))
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
-const featuredWithCovers = allPosts.filter((post) => post.data.featured && post.data.cover);
-const featuredIds = new Set(featuredWithCovers.map((post) => post.id));
-const posts = [...featuredWithCovers, ...allPosts.filter((post) => !featuredIds.has(post.id))].slice(0, 5);
-const notes = await getCollection('notes');
+const articles = allArticles.slice(0, 5);
+const categoryCount = new Set(allArticles.map((article) => article.data.category)).size;
 ---
 
 <BaseLayout>
@@ -28,10 +26,10 @@ const notes = await getCollection('notes');
 
   <div class="home-shell">
     <div class="container home-grid">
-      <ProfileCard articleCount={allPosts.length} projectCount={allProjects.length} noteCount={notes.length} />
+      <ProfileCard articleCount={allArticles.length} projectCount={allProjects.length} categoryCount={categoryCount} />
 
       <div class="main-feed">
-        <ArticleMagazine posts={posts} />
+        <ArticleMagazine articles={articles} />
         <ProjectSummary count={allProjects.length} />
       </div>
     </div>
