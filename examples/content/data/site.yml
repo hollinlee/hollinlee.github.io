@@ -1,6 +1,9 @@
 title: "Your Name の 小站"
 subtitle: "欢迎来到我的个人主页"
 language: "zh-CN"
+siteLaunchedAt: "2026-07-17"
+pageViews:
+  enabled: false
 emptyStates:
   articlesTitle: "暂无公开文章"
   articlesDescription: "发布第一篇文章后，它会出现在这里。"

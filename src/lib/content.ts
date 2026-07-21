@@ -2,6 +2,10 @@ export function contentSlug(id: string) {
   return id.replace(/\/index$/, '');
 }
 
+export function contentId(collection: string, id: string) {
+  return `${collection}/${contentSlug(id)}`;
+}
+
 export function formatDate(date: Date) {
   return new Intl.DateTimeFormat('zh-CN', {
     year: 'numeric',

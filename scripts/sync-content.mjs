@@ -128,10 +128,34 @@ function validateProfile(profile) {
 }
 
 function validateSite(site) {
-  assertAllowedKeys(site, ['title', 'subtitle', 'language', 'emptyStates'], 'site');
+  assertAllowedKeys(site, ['title', 'subtitle', 'language', 'emptyStates', 'siteLaunchedAt', 'pageViews'], 'site');
   assertString(site.title, 'site.title');
   assertString(site.subtitle, 'site.subtitle');
   assertString(site.language, 'site.language');
+
+  if (site.siteLaunchedAt !== undefined) {
+    if (typeof site.siteLaunchedAt !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(site.siteLaunchedAt)) {
+      throw new Error('site.siteLaunchedAt must use YYYY-MM-DD format.');
+    }
+    const launchDate = new Date(`${site.siteLaunchedAt}T00:00:00Z`);
+    if (Number.isNaN(launchDate.valueOf()) || launchDate.toISOString().slice(0, 10) !== site.siteLaunchedAt) {
+      throw new Error('site.siteLaunchedAt must be a valid calendar date.');
+    }
+  }
+
+  if (site.pageViews !== undefined) {
+    assertRecord(site.pageViews, 'site.pageViews');
+    assertAllowedKeys(site.pageViews, ['enabled', 'endpoint'], 'site.pageViews');
+    if (site.pageViews.enabled !== undefined && typeof site.pageViews.enabled !== 'boolean') {
+      throw new Error('site.pageViews.enabled must be a boolean.');
+    }
+    if (site.pageViews.endpoint !== undefined) {
+      assertString(site.pageViews.endpoint, 'site.pageViews.endpoint');
+      if (!isPublicLink(site.pageViews.endpoint) || !site.pageViews.endpoint.startsWith('https://')) {
+        throw new Error('site.pageViews.endpoint must use https:.');
+      }
+    }
+  }
 
   if (site.emptyStates !== undefined) {
     assertAllowedKeys(site.emptyStates, ['articlesTitle', 'articlesDescription'], 'site.emptyStates');
