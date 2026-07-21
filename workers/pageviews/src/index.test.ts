@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import worker from './index';
 
 const origin = 'https://hollinlee.github.io';
-const contentId = 'note/note_1784610630';
+const contentId = 'article/article_1784610630';
 
 class FakeStatement {
   constructor(
@@ -76,7 +76,7 @@ describe('page-view worker', () => {
   });
 
   it('rejects invalid content IDs', async () => {
-    const response = await worker.fetch(request('GET', 'note/chinese-title'), env());
+    const response = await worker.fetch(request('GET', 'article/chinese-title'), env());
     expect(response.status).toBe(400);
   });
 

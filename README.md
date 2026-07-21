@@ -1,15 +1,15 @@
 # Forkable Astro Personal Homepage
 
-一个可 Fork 的 Astro 个人主页与博客主题。支持日夜背景、文章、笔记、项目、时间轴归档和 GitHub Pages，并可以从独立的 Private content repository 导入明确发布的内容。
+一个可 Fork 的 Astro 个人主页与写作主题。支持统一文章、项目、分类/Tag 检索、时间轴归档和 GitHub Pages，并可以从独立的 Private content repository 导入明确发布的内容。
 
 ## 特性
 
 - Astro 7 + TypeScript
 - Fuwari 式场景 Hero、个人资料卡和大图文章布局
-- 日间樱花与夜间霓虹主题
-- 自动轮换背景、樱花和夜间光点
+- 樱花与夜间光点主题效果
+- 单一背景池自动轮换
 - `prefers-reduced-motion` 与 `prefers-reduced-transparency`
-- 项目精选、Tag 单选和时间轴归档
+- 项目精选、关键词/分类/Tag 组合检索和时间轴归档
 - 无 Private content repo 时使用匿名 example
 - GitHub Pages 自动部署
 - Public theme 与个人内容完全分离
@@ -46,23 +46,17 @@ data/
 ├── profile.yml
 ├── site.yml
 ├── backgrounds.yml
-├── project-state.yml
-└── links.yml
+└── project-state.yml
 
 published/
 ├── assets/
 │   ├── avatar.webp
 │   ├── backgrounds/
-│   │   ├── day/
-│   │   └── night/
-│   ├── article-covers/
-│   └── project-covers/
+│   └── article-covers/
+├── articles/
 ├── pages/
 │   └── about.md
-├── posts/
-├── notes/
-├── projects/
-└── logs/
+└── projects/
 
 drafts/
 private/
@@ -125,32 +119,33 @@ transitionDuration: 2000
 blur: 5
 
 items:
-  - image: "/content-assets/backgrounds/day/day-01.webp"
+  - image: "/content-assets/backgrounds/background-01.webp"
     textPosition: "left"
     backgroundPosition: "60% 45%"
-  - image: "/content-assets/backgrounds/night/night-01.webp"
+  - image: "/content-assets/backgrounds/background-02.webp"
     textPosition: "left"
     backgroundPosition: "65% 50%"
 ```
 
-所有图片属于同一个自动轮换池，不再按日间或夜间模式分类。`textPosition` 支持 `left`、`right`、`center`；`backgroundPosition` 使用标准 CSS background position。旧版 `day` / `night` 配置仍可在迁移期间构建，但会输出弃用提示。
+所有图片属于同一个自动轮换池，不按日间或夜间模式分类。`textPosition` 支持 `left`、`right`、`center`；`backgroundPosition` 使用标准 CSS background position。
 
 ## 文章与项目
 
-文章可以使用相对路径封面：
+所有文章使用 `published/articles/article_<Unix timestamp>.md`，不区分 post 和 note。每篇文章有一个分类和零到多个 Tag：
 
 ```yaml
 ---
 title: "文章标题"
 description: "文章摘要"
+category: engineering
 publishedAt: 2026-07-18
-cover: ./cover.webp
-featured: true
+cover: "/content-assets/article-covers/article_1784530800.webp"
 tags: [Astro]
+lang: zh-CN
 ---
 ```
 
-没有独立封面的文章使用纯文字卡片，不会复用背景图或全局默认封面。需要大图时，在文章目录中提供独立图片并通过 `cover` 显式引用。
+封面放在 `published/assets/article-covers/`。没有独立封面的文章使用纯文字卡片，不会复用背景图或全局默认封面。
 
 项目通过 `data/project-state.yml` 显式控制是否公开：
 

@@ -3,9 +3,9 @@ transitionDuration: 2000
 blur: 5
 
 items:
-  - image: "/content-assets/backgrounds/day/example-day.svg"
+  - image: "/content-assets/backgrounds/background-01.svg"
     textPosition: "left"
     backgroundPosition: "center"
-  - image: "/content-assets/backgrounds/night/example-night.svg"
+  - image: "/content-assets/backgrounds/background-02.svg"
     textPosition: "left"
     backgroundPosition: "center"

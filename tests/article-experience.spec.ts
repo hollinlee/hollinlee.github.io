@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const articlePath = '/blog/welcome/';
-const markdownPath = '/notes/markdown-fixture/';
+const articlePath = '/articles/article_1784530800/';
+const markdownPath = '/articles/article_1784610660/';
 
 async function blockGiscus(page: Page) {
   await page.route('https://giscus.app/**', (route) => route.abort());
@@ -14,6 +14,25 @@ async function expectNoHorizontalOverflow(page: Page) {
   }));
   expect(sizes.document).toBeLessThanOrEqual(sizes.viewport + 1);
 }
+
+test('homepage counts all articles, includes text-only cards and keeps the title on one line', async ({ page }) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1440, height: 1000 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    await expect(page.locator('.profile-stat').first()).toContainText('3文章');
+    await expect(page.locator('.magazine-card')).toHaveCount(3);
+    await expect(page.locator('.magazine-card-no-cover')).toHaveCount(2);
+    const titleMetrics = await page.locator('.hero-copy h1').evaluate((element) => ({
+      height: element.getBoundingClientRect().height,
+      lineHeight: Number.parseFloat(getComputedStyle(element).lineHeight),
+    }));
+    expect(titleMetrics.height).toBeLessThanOrEqual(titleMetrics.lineHeight + 1);
+    await expectNoHorizontalOverflow(page);
+  }
+});
 
 test('direct article entry exposes metadata, tags, comments config and archive fallback', async ({ page }, testInfo) => {
   await page.route('https://giscus.app/client.js', (route) => route.fulfill({
@@ -75,12 +94,23 @@ test.describe('Markdown article rendering', () => {
   }
 });
 
-test('tag navigation selects the matching archive filter', async ({ page }) => {
+test('category, tag and query filters compose in the article archive', async ({ page }) => {
   await page.goto(markdownPath);
   await page.locator('.article-tags a', { hasText: '#markdown' }).click();
   await expect(page).toHaveURL(/\/archive\/\?tag=markdown$/);
   await expect(page.locator('[data-tag-value="markdown"]')).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('[data-archive-status]')).toContainText('#markdown');
+  await expect(page.locator('[data-archive-status]')).toContainText('1 篇文章');
+
+  await page.locator('[data-category-value="engineering"]').click();
+  await page.locator('[data-archive-query]').fill('Markdown');
+  await expect(page).toHaveURL(/category=engineering/);
+  await expect(page).toHaveURL(/tag=markdown/);
+  await expect(page).toHaveURL(/q=Markdown/);
+  await expect(page.locator('[data-archive-item]:visible')).toHaveCount(1);
+
+  await page.locator('[data-archive-query]').fill('no matching article');
+  await expect(page.locator('[data-archive-item]:visible')).toHaveCount(0);
+  await expect(page.locator('[data-archive-no-results]')).toBeVisible();
 });
 
 test('blocked comment service does not hide article content', async ({ page }) => {

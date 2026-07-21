@@ -5,7 +5,7 @@ const routes = [
   '/about/',
   '/archive/',
   '/projects/',
-  '/blog/welcome/',
+  '/articles/article_1784530800/',
   '/projects/personal-site/',
 ];
 const viewports = [

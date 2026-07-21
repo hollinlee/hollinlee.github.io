@@ -2,31 +2,48 @@
 import { siteMetadata } from '../../config/content';
 
 interface Props {
-  kind: string;
   title: string;
+  category: string;
   description: string;
   publishedAt: Date;
   updatedAt?: Date;
   readingMinutes: number;
   tags: string[];
   contentId: string;
+  cover?: {
+    src: string;
+    width: number;
+    height: number;
+  };
 }
 
 const {
-  kind,
   title,
+  category,
   description,
   publishedAt,
   updatedAt,
   readingMinutes,
   tags,
   contentId,
+  cover,
 } = Astro.props;
 const pageViewEndpoint = siteMetadata.pageViews?.enabled ? siteMetadata.pageViews.endpoint : undefined;
 ---
 
 <a class="article-return" data-article-return href="/archive/">← 返回归档</a>
-<div class="article-kind">{kind}</div>
+{cover && (
+  <figure class="article-cover">
+    <img
+      src={cover.src}
+      alt={`${title} 封面`}
+      width={cover.width}
+      height={cover.height}
+      fetchpriority="high"
+    />
+  </figure>
+)}
+<a class="article-kind" href={`/archive/?category=${encodeURIComponent(category)}`}>{category}</a>
 <h1>{title}</h1>
 <p class="lede">{description}</p>
 <div class="article-meta" aria-label="文章信息">

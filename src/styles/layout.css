@@ -145,7 +145,6 @@ main {
 
 .main-feed,
 .article-list,
-.now-lines,
 .list {
   display: grid;
 }
@@ -219,17 +218,6 @@ main {
   display: grid;
   grid-template-columns: 1.25fr 0.75fr;
   gap: 1.15rem;
-}
-
-.now-lines {
-  gap: 0.65rem;
-  margin-top: 0.9rem;
-}
-
-.now-line {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
 }
 
 .projects-page,
@@ -443,6 +431,7 @@ main {
     gap: 0.7rem;
   }
 
+  .category-filter,
   .tag-filter {
     margin-inline: -1rem;
     padding-inline: 1rem;
@@ -451,6 +440,7 @@ main {
     scrollbar-width: none;
   }
 
+  .category-filter::-webkit-scrollbar,
   .tag-filter::-webkit-scrollbar {
     display: none;
   }
