@@ -1,0 +1,29 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "hollinlee-pageviews",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-21",
+  "vars": {
+    "ALLOWED_ORIGINS": "https://hollinlee.github.io,http://127.0.0.1:4330"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hollinlee-pageviews",
+      "database_id": "82d255e4-a1fd-425e-a010-71c9163ed07b"
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 60,
+        "period": 60
+      }
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
