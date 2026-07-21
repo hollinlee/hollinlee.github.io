@@ -7,6 +7,7 @@ import BackgroundRotator from '../components/hero/BackgroundRotator.astro';
 import ThemeScript from '../components/theme/ThemeScript.astro';
 import SiteNavigation from '../components/navigation/SiteNavigation.astro';
 import { site } from '../config/site';
+import { siteAgeInDays } from '../lib/content';
 
 interface Props {
   title?: string;
@@ -51,7 +52,10 @@ const pageContext = path === '/'
     <SiteNavigation pathname={Astro.url.pathname} />
     <main><slot /></main>
     <footer class="site-footer">
-      <div class="container">© {new Date().getFullYear()} {site.name}</div>
+      <div class="container">
+        <p>本站已运行 {siteAgeInDays(site.siteLaunchedAt)} 天</p>
+        <small>© {new Date().getFullYear()} {site.name}</small>
+      </div>
     </footer>
   </body>
 </html>
