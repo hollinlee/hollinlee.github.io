@@ -11,8 +11,14 @@
     "dev": "npm run content:sync && astro dev",
     "build": "npm run content:sync && astro build",
     "check": "npm run content:sync && astro check",
-    "test": "node --test src/lib/*.test.mjs",
+    "test": "node --test src/lib/*.test.mjs && npm run pageviews:check && npm run pageviews:test",
     "test:e2e": "playwright test",
+    "pageviews:check": "tsc --noEmit -p workers/pageviews/tsconfig.json",
+    "pageviews:test": "vitest run --config workers/pageviews/vitest.config.ts",
+    "pageviews:dev": "wrangler dev --config workers/pageviews/wrangler.jsonc",
+    "pageviews:deploy": "wrangler deploy --config workers/pageviews/wrangler.jsonc",
+    "pageviews:schema:local": "wrangler d1 execute hollinlee-pageviews --local --file workers/pageviews/schema.sql --config workers/pageviews/wrangler.jsonc",
+    "pageviews:schema:remote": "wrangler d1 execute hollinlee-pageviews --remote --file workers/pageviews/schema.sql --config workers/pageviews/wrangler.jsonc",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -30,8 +36,11 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@cloudflare/workers-types": "^5.20260721.1",
     "@playwright/test": "^1.61.1",
     "@types/node": "^24.13.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10",
+    "wrangler": "^4.112.0"
   }
 }

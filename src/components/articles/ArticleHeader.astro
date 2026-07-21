@@ -1,4 +1,6 @@
 ---
+import { siteMetadata } from '../../config/content';
+
 interface Props {
   kind: string;
   title: string;
@@ -20,6 +22,7 @@ const {
   tags,
   contentId,
 } = Astro.props;
+const pageViewEndpoint = siteMetadata.pageViews?.enabled ? siteMetadata.pageViews.endpoint : undefined;
 ---
 
 <a class="article-return" data-article-return href="/archive/">← 返回归档</a>
@@ -36,7 +39,14 @@ const {
     </span>
   )}
   <span class="article-meta-item">约 {readingMinutes} 分钟读完</span>
-  <span class="article-meta-item" data-page-view-slot data-content-id={contentId} hidden aria-live="polite"></span>
+  <span
+    class="article-meta-item"
+    data-page-view-slot
+    data-content-id={contentId}
+    data-endpoint={pageViewEndpoint}
+    hidden
+    aria-live="polite"
+  ></span>
 </div>
 {tags.length > 0 && (
   <nav class="article-tags" aria-label="文章 Tags">
@@ -56,5 +66,43 @@ const {
     } catch {
       // Keep the archive fallback when the referrer is not a valid URL.
     }
+  }
+</script>
+
+<script>
+  import { pageViewUrl, shouldIncrementView } from '../../lib/pageviews.mjs';
+
+  const viewSlot = document.querySelector<HTMLElement>('[data-page-view-slot]');
+  const endpoint = viewSlot?.dataset.endpoint;
+  const contentId = viewSlot?.dataset.contentId;
+  if (viewSlot && endpoint && contentId) {
+    const storageKey = `page-view:${contentId}`;
+    let previousTimestamp: string | null = null;
+    try {
+      previousTimestamp = localStorage.getItem(storageKey);
+    } catch {
+      // A blocked storage API should not block reading the article.
+    }
+    const increment = shouldIncrementView(previousTimestamp);
+    fetch(pageViewUrl(endpoint, contentId), { method: increment ? 'POST' : 'GET' })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Page-view request failed with ${response.status}.`);
+        return response.json() as Promise<{ views?: number }>;
+      })
+      .then((result) => {
+        if (typeof result.views !== 'number') return;
+        if (increment) {
+          try {
+            localStorage.setItem(storageKey, String(Date.now()));
+          } catch {
+            // The count is still useful when storage is unavailable.
+          }
+        }
+        viewSlot.textContent = `${result.views} 次访问`;
+        viewSlot.hidden = false;
+      })
+      .catch(() => {
+        viewSlot.hidden = true;
+      });
   }
 </script>
