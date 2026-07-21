@@ -1,0 +1,49 @@
+---
+title: "Markdown 渲染示例"
+description: "覆盖技术文章常用的 GFM、代码、表格、引用和数学公式。"
+publishedAt: 2026-07-21
+updatedAt: 2026-07-22
+tags:
+  - markdown
+  - astro
+lang: zh-CN
+comments: false
+---
+
+## 标题层级
+
+正文包含 `inline code`、**加粗文字**和一个脚注。[^source]
+
+### 列表
+
+- 无序列表
+- [x] 已完成任务
+- [ ] 待处理任务
+
+1. 第一项
+2. 第二项
+
+> 引用内容需要与正文保持清晰层级，并在移动端正常换行。
+
+### 代码
+
+```ts
+const veryLongValue = 'This line stays readable by scrolling inside the code block instead of stretching the entire page.';
+```
+
+### 表格
+
+| 项目 | 说明 | 状态 |
+| --- | --- | --- |
+| GFM | GitHub Flavored Markdown | ready |
+| KaTeX | 数学公式 | ready |
+
+### 数学公式
+
+行内公式 $E = mc^2$。
+
+$$
+\sum_{i=1}^{n} i = \frac{n(n+1)}{2}
+$$
+
+[^source]: 这是脚注内容。
