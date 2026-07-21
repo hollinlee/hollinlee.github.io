@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import ArticleHeader from '../../components/articles/ArticleHeader.astro';
+import GiscusComments from '../../components/articles/GiscusComments.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { site } from '../../config/site';
 import { contentId, contentSlug, estimateReadingMinutes } from '../../lib/content';
@@ -27,6 +28,6 @@ const { Content } = await render(post);
       contentId={contentId('post', post.id)}
     />
     <Content />
-    <div data-comments-slot aria-label="评论"></div>
+    {post.data.comments && <GiscusComments />}
   </article>
 </BaseLayout>
