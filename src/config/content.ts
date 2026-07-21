@@ -32,6 +32,11 @@ export type SiteData = {
   title: string;
   subtitle: string;
   language: string;
+  siteLaunchedAt?: string;
+  pageViews?: {
+    enabled?: boolean;
+    endpoint?: string;
+  };
   emptyStates?: {
     articlesTitle: string;
     articlesDescription: string;
