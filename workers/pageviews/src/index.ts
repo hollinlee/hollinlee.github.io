@@ -24,6 +24,13 @@ export default {
         : json({ error: 'Origin is not allowed.' }, 403);
     }
 
+    if (url.pathname === '/views') {
+      if (request.method !== 'GET') return json({ error: 'Method not allowed.' }, 405, allowedOrigin);
+      const row = await env.DB.prepare("SELECT COALESCE(SUM(views), 0) AS views FROM page_views WHERE content_id LIKE 'article/%' OR content_id LIKE 'project/%'")
+        .first<ViewRow>();
+      return json({ views: row?.views ?? 0 }, 200, allowedOrigin);
+    }
+
     if (!url.pathname.startsWith('/views/')) return json({ error: 'Not found.' }, 404);
     const contentId = parseContentId(url.pathname.slice('/views/'.length));
     if (!contentId) return json({ error: 'Invalid content ID.' }, 400, allowedOrigin);

@@ -10,7 +10,6 @@ const allProjects = (await getCollection('projects')).sort((a, b) => a.data.orde
 const allArticles = (await getCollection('articles'))
   .sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
 const articles = allArticles.slice(0, 5);
-const categoryCount = new Set(allArticles.map((article) => article.data.category)).size;
 ---
 
 <BaseLayout>
@@ -26,7 +25,7 @@ const categoryCount = new Set(allArticles.map((article) => article.data.category
 
   <div class="home-shell">
     <div class="container home-grid">
-      <ProfileCard articleCount={allArticles.length} projectCount={allProjects.length} categoryCount={categoryCount} />
+      <ProfileCard articleCount={allArticles.length} projectCount={allProjects.length} />
 
       <div class="main-feed">
         <ArticleMagazine articles={articles} />

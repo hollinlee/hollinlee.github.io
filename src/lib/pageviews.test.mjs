@@ -3,6 +3,7 @@ import test from 'node:test';
 import {
   pageViewUrl,
   shouldIncrementView,
+  totalViewsUrl,
   VIEW_DEDUP_WINDOW_MS,
 } from './pageviews.mjs';
 
@@ -17,9 +18,10 @@ test('increments when no valid timestamp exists', () => {
   assert.equal(shouldIncrementView('invalid'), true);
 });
 
-test('encodes collection-scoped content IDs', () => {
+test('builds page-view API URLs', () => {
   assert.equal(
     pageViewUrl('https://views.example.com/', 'article/article_1784610630'),
     'https://views.example.com/views/article%2Farticle_1784610630',
   );
+  assert.equal(totalViewsUrl('https://views.example.com/'), 'https://views.example.com/views');
 });
