@@ -680,9 +680,7 @@ body[data-page-context='reading'] .night-particle:nth-child(n + 8) {
 }
 
 .prose {
-  width: min(100%, 760px);
   min-width: 0;
-  padding: clamp(1.25rem, 4vw, 2.5rem);
   overflow-wrap: anywhere;
 }
 
