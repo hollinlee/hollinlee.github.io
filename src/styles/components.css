@@ -892,9 +892,19 @@ body[data-page-context='reading'] .night-particle:nth-child(n + 8) {
   background: var(--accent-primary);
 }
 
-[data-comments-slot] {
-  min-height: 1px;
+.giscus-comments {
   margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.giscus-comments h2 {
+  margin-top: 1rem;
+}
+
+.giscus {
+  min-height: 160px;
+  margin-top: 1rem;
 }
 
 .lede {

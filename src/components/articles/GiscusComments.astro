@@ -1,0 +1,54 @@
+<section class="giscus-comments" aria-labelledby="comments-title">
+  <h2 id="comments-title">评论</h2>
+  <div
+    class="giscus"
+    data-giscus-host
+    data-repo="hollinlee/hollinlee.github.io"
+    data-repo-id="R_kgDOTbRpwg"
+    data-category="Announcements"
+    data-category-id="DIC_kwDOTbRpws4DBoSn"
+  ></div>
+</section>
+
+<script>
+  const host = document.querySelector<HTMLElement>('[data-giscus-host]');
+  if (host && !host.querySelector('script')) {
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    script.dataset.repo = host.dataset.repo ?? '';
+    script.dataset.repoId = host.dataset.repoId ?? '';
+    script.dataset.category = host.dataset.category ?? '';
+    script.dataset.categoryId = host.dataset.categoryId ?? '';
+    script.dataset.mapping = 'pathname';
+    script.dataset.strict = '0';
+    script.dataset.reactionsEnabled = '1';
+    script.dataset.emitMetadata = '0';
+    script.dataset.inputPosition = 'bottom';
+    script.dataset.theme = document.documentElement.dataset.theme === 'night' ? 'dark' : 'light';
+    script.dataset.lang = 'zh-CN';
+    script.dataset.loading = 'lazy';
+    host.append(script);
+  }
+
+  function applyGiscusTheme() {
+    const frame = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    frame?.contentWindow?.postMessage({
+      giscus: {
+        setConfig: {
+          theme: document.documentElement.dataset.theme === 'night' ? 'dark' : 'light',
+        },
+      },
+    }, 'https://giscus.app');
+  }
+
+  const observer = new MutationObserver(() => {
+    const frame = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    if (!frame) return;
+    frame.addEventListener('load', applyGiscusTheme, { once: true });
+    observer.disconnect();
+  });
+  observer.observe(host ?? document.body, { childList: true, subtree: true });
+  addEventListener('site-theme-change', applyGiscusTheme);
+</script>

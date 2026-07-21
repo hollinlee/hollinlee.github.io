@@ -8,6 +8,7 @@ const commonArticle = {
   updatedAt: z.coerce.date().optional(),
   tags: z.array(z.string()).default([]),
   lang: z.enum(['zh-CN', 'en']).default('zh-CN'),
+  comments: z.boolean().default(true),
 };
 
 const posts = defineCollection({
