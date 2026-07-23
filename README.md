@@ -14,6 +14,8 @@
 - GitHub Pages 自动部署
 - Public theme 与个人内容完全分离
 
+后续能力与实施优先级见 [Site Roadmap](./ROADMAP.md)。
+
 ## 快速开始
 
 环境要求：Node.js 22 或更新版本。
